@@ -1,5 +1,6 @@
 #include "Point.hpp"
 #include <cmath>
+#include <iostream>
 
 #define square(a)  (a)*(a)
 
@@ -11,7 +12,7 @@ class Arc{
 };
 
 // Fonctions externes 
-ostream & operator <<(ostream& os, const Arc &A)
+ostream & operator <<(ostream& os, const Arc &A);
 
 class Segment : public Arc{
     public:

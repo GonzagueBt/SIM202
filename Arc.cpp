@@ -1,7 +1,7 @@
 #include "Arc.hpp"
 
 
-Arc::ostream & operator <<(ostream& os, const Arc &A)
+ostream&operator<<(ostream& os, const Arc &A)
 {
 os<<"Distance entre "<<A.a<<" et "<<A.b<<" : "<<A.poid;
 return os;
