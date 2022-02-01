@@ -24,3 +24,4 @@ bool operator == (const Point& ,const Point& );
 bool operator != (const Point& ,const Point& );
 bool operator<(const Point&, const Point&);
 ostream & operator <<(ostream &, const Point &);
+Point operator | (const Point &u, const Point &v); 
