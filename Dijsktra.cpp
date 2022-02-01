@@ -1,6 +1,6 @@
-#include "Arc.hpp"
-#include <vector>
-#include <iostream>
+#include "Dijsktra.hpp"
+
+ #define max INT_MAX
 
 // N nombre de sommets du graphe 
 //c  : matrice des poids du graphe (cij et le poid de l'arrete ij)
@@ -16,7 +16,7 @@ void Dijsktra(int N, double c[5][5], double *l, double *p){
     // Initialisation de l et p //
     for(int i=0; i<N; i++){
         l[i]=c[0][i];
-        if(i>0 && c[0][i]< INFINITY) p[i]=0;
+        if(i>0 && c[0][i]< max) p[i]=0;
         else  p[i]=-1;
 
         if(i>0) T.push_back(i); // On rempli T
@@ -25,7 +25,7 @@ void Dijsktra(int N, double c[5][5], double *l, double *p){
 
     while(!T.empty()){ //Tant que liste T n'est pas vide
         // Recherche du point pt de T tel que l[pt] est minimum //
-        int min = INFINITY; //intialise la mémoire de la recherche
+        int min = max; //intialise la mémoire de la recherche
         int pt = 0;
         vector<int>::iterator its=T.begin(); // On parcourt T avec un iterator
         for(; its!= T.end(); its++){ 
@@ -59,11 +59,11 @@ void Dijsktra(int N, double c[5][5], double *l, double *p){
 int main(){
     //Exemple de l'énoncé avec 5 points
     double c[5][5] = {
-        {0, 15, INFINITY, INFINITY, 4},
-        {INFINITY, 0, INFINITY, INFINITY, INFINITY}, 
-        {INFINITY, 3, 0, 2, INFINITY}, 
-        {10, 3, INFINITY, 0, INFINITY}, 
-        {INFINITY, INFINITY, 7, 5, 0}};
+        {0, 15, max, max, 4},
+        {max, 0, max, max, max}, 
+        {max, 3, 0, 2, max}, 
+        {10, 3, max, 0, max}, 
+        {max, max, 7, 5, 0}};
     int N=5;
     double l[N];
     double p[N];
