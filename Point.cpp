@@ -23,3 +23,11 @@ bool operator <(const Point & P,const Point &Q)
 
 ostream & operator <<(ostream & os, const Point &P)
 {os<<"("<<P.x<<","<<P.y<<")"; return os;}
+
+Point operator|(const Point &u, const Point &v)
+{
+    Point res;
+    res.x = abs(u.x - v.x);
+    res.y = abs(u.y - v.y);
+    return res;
+}
