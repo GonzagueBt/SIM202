@@ -55,7 +55,8 @@ double transfo(const Point & a, const Point & b, const Point & c)
 
 
 bool Obstacle::concave_convexe(const Obstacle &Obs)
-{
+{   
+    if(Obs.nbr_sommets==1) return true; /// ajout pour gestion facile point de départ et d'arrivée dans Graphe
     int k = 0;
     for (int i = 0; i < (Obs.nbr_sommets - 2); i++)
     {
@@ -74,7 +75,8 @@ bool Obstacle::concave_convexe(const Obstacle &Obs)
 
 
 bool inte_exte(const Point & P, const Obstacle &Obs)
-{
+{   
+    if(Obs.nbr_sommets==1) return true; /// ajout pour gestion facile point de départ et d'arrivée dans Graphe
     
 }
 
