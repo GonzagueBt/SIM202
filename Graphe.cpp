@@ -8,17 +8,19 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
     Obstacle final= *its;
     its++;
     while(its!= obst.end()){
-        final = sommeObstacles(final, *its);
+        final = sumObstacles(final, *its);
         its++;
     }
     Point dep[1] = x;
     Obstacle depart(dep, 1);
-    final = sommeObstacles(final, depart);
+    final = sumObstacles(final, depart);
     depart.Sommets[0] = y;
-    graphe_ = sommeObstacles(final, depart).segValides;
+    final = sumObstacles(final, depart);
+    graphe_ = final.segValides;
+    nb_sommets = final.nbr_sommets;
 }
 
-Obstacle sommeObstacles(Obstacle ob1, Obstacle ob2){
+Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     list<Segment>::iterator its = ob2.segValides.begin();
     for(; its!= ob2.segValides.end(); its++) ob1.segValides.push_back(*its);
     for(int i=0; i<ob1.nbr_sommets; i++){
@@ -39,7 +41,8 @@ Obstacle sommeObstacles(Obstacle ob1, Obstacle ob2){
             }
         }
     }
-    ob1.nbr_sommets += ob2.nbr_sommets;
+    ob1.nbr_sommets += ob2.nbr_sommets; // il faut vérif qu'il n'y ait pas 2 fois le même sommet 
+    // cad un meme point dans les 2 obstacles : quand concatene les 2 obstacles, les 2 points ne font plus qu'un
     ob1.Sommets = concatenateListe(ob1.nbr_sommets, ob2.nbr_sommets, ob1.Sommets, ob2.Sommets);
     return ob1;
 }
@@ -77,3 +80,45 @@ bool intersect(Point A, Point B, Point C, Point D){
 }
 
 ////////////////////////////////////////////////////////////
+
+vector<vector<double> > buildMatrixC(Graphe g){
+    int nb = g.nb_sommets;
+    double c[nb][nb];
+
+    //intitalisation de c
+    for(int i=0; i<nb; i++){
+        for(int j=0; j<nb; j++){
+            if(i==j) c[i][j]==0;
+            else c[i][j] = max;
+        }
+    }
+    Point memory[nb];
+    memory[0] = g.depart;
+    memory[nb-1] = g.fin;
+    int cpt=1;
+    list<Segment>::iterator its = g.graphe_.begin();
+    for(; its!= g.graphe_.end(); its++){
+        int a = isIn(its->a, memory, nb);
+        int b = isIn(its->b, memory, nb);
+        if(b== -1){ 
+            memory[cpt] = its->b;
+            b = cpt;
+            cpt++;
+        }
+        if(a== -1){
+            memory[cpt] = its->a;
+            a = cpt;
+            cpt++;
+        }
+        c[a][b] = its->poid;
+        c[b][a] = its->poid;
+    }
+
+}
+
+int isIn(Point a, Point *memory, int nb){
+    for(int i=0; i<nb; i++){
+        if(a==memory[i]) return i;
+    }
+    return -1;
+}
