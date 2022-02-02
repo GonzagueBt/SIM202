@@ -44,10 +44,6 @@ Obstacle sommeObstacles(Obstacle ob1, Obstacle ob2){
     return ob1;
 }
 
-Obstacle ajoutPointObstacle(Obstacle ob, Point pt){
-    list<Segment>::iterator its = ob.segValides.begin();
-
-}
 
 
 // Prend 2 listes de points avec le taille en entrée, et retourne un tableau de la concatenation des deux listes.
