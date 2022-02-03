@@ -12,6 +12,10 @@ main: $(OBJ)
 
 Dijsktra : Dijsktra.o Arc.o Point.o
 	$(CXX) -o Dijsktra $^
+d : 
+	make clean
+	make Dijsktra
+	./Dijsktra
  
 .PHONY: clean mrproper
 
