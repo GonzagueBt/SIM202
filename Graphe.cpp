@@ -7,15 +7,15 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
     list<Obstacle>::iterator its=obst.begin();
     Obstacle final= *its;
     its++;
-    while(its!= obst.end()){
+    while(its!= obst.end()){ // on ajoute un par un les obstacles (on ajoute à la liste des segments les segments entre obstacles)
         final = sumObstacles(final, *its);
         its++;
     }
     Point dep[1] = x;
     Obstacle depart(dep, 1);
-    final = sumObstacles(final, depart);
+    final = sumObstacles(final, depart); //traitement des segments entre le point de départ et et les sommets du graphe
     depart.Sommets[0] = y;
-    final = sumObstacles(final, depart);
+    final = sumObstacles(final, depart);  //traitement des segments entre le point de fin et et les sommets du graphe
     graphe_ = final.segValides;
     nb_sommets = final.nbr_sommets;
 }
@@ -26,18 +26,25 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     for(int i=0; i<ob1.nbr_sommets; i++){
         for(int  j=0; j<ob2.nbr_sommets; j++){
             its=ob1.segValides.begin();
-            for(; its!= ob1.segValides.end(); its++){
-                if(!intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){
-                    Segment newSeg = Segment(ob1.Sommets[i], ob2.Sommets[j]);
-                    ob1.segValides.push_back(newSeg);
+            bool isValide = true; 
+            for(; its!= ob1.segValides.end(); its++){ //on parcout tous les segments de l'obstacle 1
+                if(!intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){ // si ontersection entre segment de ob1 et segment ij
+                    isValide = false; // le segment ij est non valdie
+                    break; //on arrete la vérif puisque sait deja que le segment est invalide
                 } 
             }
-            its=ob2.segValides.begin();
+            if(!isValide) break; // si le semgent est deja invalide, cela ne sert à rien de continuer la vérif
+            // On fait la meme chose pour les semgents de l'obstacle 2
+            its=ob2.segValides.begin(); 
             for(; its!= ob2.segValides.end(); its++){
                 if(!intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){
-                    Segment newSeg = Segment(ob1.Sommets[i], ob2.Sommets[j]);
-                    ob1.segValides.push_back(newSeg);
+                    isValide = false;
+                    break;
                 } 
+            }
+            if(isValide){ // si le segment est toujorus valdie après les vérifications, on l'ajoute à la liste segValides
+                Segment newSeg = Segment(ob1.Sommets[i], ob2.Sommets[j]);
+                ob1.segValides.push_back(newSeg);
             }
         }
     }
@@ -113,7 +120,6 @@ vector<vector<double> > buildMatrixC(Graphe g){
         c[a][b] = its->poid;
         c[b][a] = its->poid;
     }
-
 }
 
 int isIn(Point a, Point *memory, int nb){
