@@ -28,7 +28,7 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
             its=ob1.segValides.begin();
             bool isValide = true; 
             for(; its!= ob1.segValides.end(); its++){ //on parcout tous les segments de l'obstacle 1
-                if(!intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){ // si ontersection entre segment de ob1 et segment ij
+                if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){ // si ontersection entre segment de ob1 et segment ij
                     isValide = false; // le segment ij est non valdie
                     break; //on arrete la vérif puisque sait deja que le segment est invalide
                 } 
@@ -37,7 +37,7 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
             // On fait la meme chose pour les semgents de l'obstacle 2
             its=ob2.segValides.begin(); 
             for(; its!= ob2.segValides.end(); its++){
-                if(!intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){
+                if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){
                     isValide = false;
                     break;
                 } 
