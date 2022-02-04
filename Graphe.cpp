@@ -88,7 +88,7 @@ bool intersect(Point A, Point B, Point C, Point D){
 
 ////////////////////////////////////////////////////////////
 
-vector<vector<double> > buildMatrixC(Graphe g){
+double ** buildMatrixC(Graphe g){
     int nb = g.nb_sommets;
     double c[nb][nb];
 
@@ -120,6 +120,7 @@ vector<vector<double> > buildMatrixC(Graphe g){
         c[a][b] = its->poid;
         c[b][a] = its->poid;
     }
+    return reinterpret_cast<double **>(c);
 }
 
 int isIn(Point a, Point *memory, int nb){

@@ -9,7 +9,7 @@
 //les sommets sont considérés nommées de 0 à n, 0 étant systématiquement le sommet de départ
 // Exemple : cout de l'arrete 01 = c[0][1]
 
-void Dijsktra(int N, double c[5][5], double *l, double *p){
+void Dijsktra(int N, double **c, double *l, double *p){
     vector<int> S;
     vector<int> T;
     S.push_back(0); 
@@ -57,13 +57,7 @@ void Dijsktra(int N, double c[5][5], double *l, double *p){
 
 
 int main(){
-    //Exemple de l'énoncé avec 5 points
-    double c[5][5] = {
-        {0, 15, max, max, 4},
-        {max, 0, max, max, max}, 
-        {max, 3, 0, 2, max}, 
-        {10, 3, max, 0, max}, 
-        {max, max, 7, 5, 0}};
+    double **c= exempleEnonce();
     int N=5;
     double l[N];
     double p[N];
@@ -81,4 +75,31 @@ int main(){
     cout<<"}"<<endl;
 
     return 0;
+}
+
+//Exemple de l'énoncé avec 5 points
+double ** exempleEnonce(){
+    double **c;
+    c = new double *[5];
+    for(int i = 0; i <5; i++)
+    c[i] = new double[5];
+    for(int i=0; i<5; i++){
+        for(int j=0; j<5; j++){
+            c[i][j] = max;
+        }
+    }
+    c[0][0]=0;
+    c[0][1]=15;
+    c[0][4]=4;
+    c[1][1]=0;
+    c[2][1]=3;
+    c[2][2]=0;
+    c[2][3]=2;
+    c[3][0]=10;
+    c[3][1]=3;
+    c[3][3]=0;
+    c[4][2]=7;
+    c[4][3]=5;
+    c[4][4]=0;
+    return reinterpret_cast<double **>(c);
 }
