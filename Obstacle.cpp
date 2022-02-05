@@ -121,8 +121,8 @@ Point_et_Indice Trouver_Sommet_le_plus_proche(const Point &A, const Obstacle &Ob
 }
 
 bool Obstacle::inte_exte(const Point & P, const Obstacle &Obs)
-{
-    if(Obs.nbr_sommets==1) return true; // ajout pour gestion facile point de départ et d'arrivée dans Graphe
+{   
+    if(Obs.nbr_sommets==1 && Obs.Sommets[0]!=P) return true; // ajout pour gestion facile point de départ et d'arrivée dans Graphe
     // on commence par chercher le sommet le plus proche de P
     Point_et_Indice Q;
     Q = Trouver_Sommet_le_plus_proche(P, Obs);
