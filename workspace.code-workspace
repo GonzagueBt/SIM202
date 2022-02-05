@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../P2/SIM201/TP"
+		},
+		{
+			"path": "../../../../Programmation/Algorithme/TAP"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"list": "cpp",
+			"vector": "cpp",
+			"iostream": "cpp"
+		}
+	}
+}
