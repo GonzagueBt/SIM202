@@ -88,6 +88,7 @@ bool intersect(Point A, Point B, Point C, Point D){
 
 ////////////////////////////////////////////////////////////
 
+//Construction de la matrice
 double ** buildMatrixC(Graphe g){
     int nb = g.nb_sommets;
     double c[nb][nb];
@@ -123,6 +124,7 @@ double ** buildMatrixC(Graphe g){
     return reinterpret_cast<double **>(c);
 }
 
+// renvoie l'index du point a dans la liste memory. Retourne -1 a n'est pas dans la liste
 int isIn(Point a, Point *memory, int nb){
     for(int i=0; i<nb; i++){
         if(a==memory[i]) return i;
