@@ -107,10 +107,10 @@ vector<vector<double> > initC(int nb){
 
 
 //Construction de la matrice
-vector<vector<double> > buildMatrixC(Graphe g){
+vector<vector<double> > buildMatrixC(Point * memory, Graphe g){
     int nb = g.nb_sommets;
     vector<vector<double> > c = initC(nb);
-    Point memory[nb];
+    //Point memory[nb];
     memory[0] = g.depart;
     memory[nb-1] = g.fin;
     int cpt=1;
@@ -135,21 +135,17 @@ vector<vector<double> > buildMatrixC(Graphe g){
 }
 
 // renvoie l'index du point a dans la liste memory. Retourne -1 a n'est pas dans la liste
-int isIn(Point a, Point *memory, int nb){
+int isIn(Point a, Point * memory, int nb){
     for(int i=0; i<nb; i++){
         if(a==memory[i]) return i;
     }
     return -1;
 }
 
+//renvoie true si le point a est dans le vecteur de Point pts. Retourne false sinon
 bool isIn(Point a, vector<Point> pts){
     for(int i=0; i<pts.size(); i++){
         if(a==pts[i]) return true;
     }
     return false;
-}
-
-int main(){
-    cout<<"test"<<endl;
-    return 0;
 }
