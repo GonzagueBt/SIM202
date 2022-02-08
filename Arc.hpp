@@ -1,6 +1,8 @@
 #include "Point.hpp"
 #include <cmath>
 #include <iostream>
+#ifndef Arc_H
+#define Arc_H
 
 #define square(a)  (a)*(a)
 
@@ -18,3 +20,6 @@ class Segment : public Arc{
     public:
         Segment(Point x, Point y);
 }; 
+
+
+#endif

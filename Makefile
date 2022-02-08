@@ -12,6 +12,15 @@ main: $(OBJ)
 
 Dijsktra : Dijsktra.o Arc.o Point.o
 	$(CXX) -o Dijsktra $^
+
+Graphe : Graphe.o Obstacle.o Arc.o Point.o
+	$(CXX) -o Graphe $^
+
+g : 
+	make clean
+	make Graphe
+	./Graphe
+
 d : 
 	make clean
 	make Dijsktra

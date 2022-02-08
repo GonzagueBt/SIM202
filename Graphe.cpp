@@ -11,7 +11,8 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
         final = sumObstacles(final, *its);
         its++;
     }
-    Point dep[1] = x;
+    Point dep[1];
+    dep[0]= x;
     Obstacle depart(dep, 1);
     final = sumObstacles(final, depart); //traitement des segments entre le point de départ et et les sommets du graphe
     depart.Sommets[0] = y;
@@ -48,6 +49,7 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
             }
         }
     }
+
     ob1.nbr_sommets += ob2.nbr_sommets; // il faut vérif qu'il n'y ait pas 2 fois le même sommet 
     // cad un meme point dans les 2 obstacles : quand concatene les 2 obstacles, les 2 points ne font plus qu'un
     ob1.Sommets = concatenateListe(ob1.nbr_sommets, ob2.nbr_sommets, ob1.Sommets, ob2.Sommets);
@@ -96,7 +98,7 @@ double ** buildMatrixC(Graphe g){
     //intitalisation de c
     for(int i=0; i<nb; i++){
         for(int j=0; j<nb; j++){
-            if(i==j) c[i][j]==0;
+            if(i==j) c[i][j]=0;
             else c[i][j] = max;
         }
     }
@@ -130,4 +132,9 @@ int isIn(Point a, Point *memory, int nb){
         if(a==memory[i]) return i;
     }
     return -1;
+}
+
+int main(){
+    cout<<"test"<<endl;
+    return 0;
 }

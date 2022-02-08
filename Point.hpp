@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
-
+#ifndef Point_H
+#define Point_H
 using namespace std;
 
 class Point{
@@ -25,3 +26,5 @@ bool operator != (const Point& ,const Point& );
 bool operator<(const Point&, const Point&);
 ostream & operator <<(ostream &, const Point &);
 Point operator | (const Point &u, const Point &v); 
+
+#endif

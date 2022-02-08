@@ -1,5 +1,4 @@
 #include "Obstacle.hpp"
-#include "Arc.hpp"
 #include <list>
 #include <vector>
 
@@ -17,7 +16,8 @@ class Graphe{
 
 
 Obstacle sumObstacles(Obstacle ob1, Obstacle ob2);
-Point * concatenateListe(Point * liste1, Point * liste2);
+Point * concatenateListe(int nb1, int nb2, Point * liste1, Point * liste2);
 bool ccw(Point A, Point B, Point C);
 bool intersect(Point A, Point B, Point C, Point D);
 double** buildMatrixC(Graphe g);
+int isIn(Point a, Point *memory, int nb);
