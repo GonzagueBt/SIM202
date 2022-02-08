@@ -2,8 +2,10 @@
 #include <list>
 #include <vector>
 using namespace std;
-
 #define max INT_MAX
+
+#ifndef Graphe
+#define Graphe_H
 
 class Graphe{
     public :
@@ -24,3 +26,5 @@ vector<vector<double> > buildMatrixC(Point * memory, Graphe g);
 int isIn(Point a, Point *memory, int nb);
 bool isIn(Point a, vector<Point> pts);
 vector<vector<double> > initC(int nb);
+
+#endif

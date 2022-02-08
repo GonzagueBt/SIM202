@@ -36,6 +36,7 @@ clean:
 	rm -rf *.o
 	rm -rf main
 	rm -rf Dijsktra
+	rm -rf Graphe
 
  
 mrproper: clean

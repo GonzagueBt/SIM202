@@ -1,8 +1,5 @@
-#include "Graphe.hpp"
-#include "Dijsktra.hpp"
-using namespace std;
-#include <iostream> 
-#include <list>
+
+#include "main.hpp"
 
 
 
@@ -26,8 +23,9 @@ int main(){
     double l[g.nb_sommets];
     double p[g.nb_sommets];
     Dijsktra(g.nb_sommets, c, l, p);
-
-
+    cout<<endl;
+    cout<<"=========== Construction fichier graphe.txt ==========="<<endl;
+    parserGraphe(g,cheminFinale(memory, p, g.nb_sommets));
     return 0;
 }
 

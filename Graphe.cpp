@@ -30,8 +30,8 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
 
     list<Segment>::iterator its = ob2.segValides.begin();
     for(; its!= ob2.segValides.end(); its++) ob1.segValides.push_back(*its);
-    for(int i=0; i<pts.size(); i++){
-        for(int j=i+1; j<pts.size(); j++){
+    for(int i=0; i< (int) pts.size(); i++){
+        for(int j=i+1; j< (int) pts.size(); j++){
             its=ob1.segValides.begin();
             bool isValide = true; 
             for(; its!= ob1.segValides.end(); its++){ //on parcout tous les segments de l'obstacle 1
@@ -62,20 +62,6 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
 
 
 
-// Prend 2 listes de points avec le taille en entrée, et retourne un tableau de la concatenation des deux listes.
-Point * concatenateListe(int nb1, int nb2, Point * liste1, Point * liste2){
-    Point res[nb1+nb2];
-    for(int i=0; i<nb1; i++){
-        res[i]=liste1[i];
-    }
-    for(int i=0; i<nb2; i++){
-        res[i+nb1]=liste2[i];
-    }
-    return res;
-}
-
-//vector<vector<double> > init
-
 
 //////// Intersection entre 2 segments AB et CD /////////
 // https://bryceboe.com/2006/10/23/line-segment-intersection-algorithm/
@@ -87,8 +73,9 @@ bool ccw(Point A, Point B, Point C){
 bool intersect(Point A, Point B, Point C, Point D){
     return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D);
 }
-
 ////////////////////////////////////////////////////////////
+
+
 vector<vector<double> > initC(int nb){
     vector<vector<double> > c;
     vector<double> ligne(nb);
@@ -144,7 +131,7 @@ int isIn(Point a, Point * memory, int nb){
 
 //renvoie true si le point a est dans le vecteur de Point pts. Retourne false sinon
 bool isIn(Point a, vector<Point> pts){
-    for(int i=0; i<pts.size(); i++){
+    for(int i=0; i< (int) pts.size(); i++){
         if(a==pts[i]) return true;
     }
     return false;
