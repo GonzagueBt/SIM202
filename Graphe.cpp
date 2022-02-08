@@ -11,8 +11,8 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
         final = sumObstacles(final, *its);
         its++;
     }
-    Point dep[1];
-    dep[0]= x;
+    vector<Point> dep;
+    dep.push_back(x);
     Obstacle depart(dep, 1);
     final = sumObstacles(final, depart); //traitement des segments entre le point de départ et et les sommets du graphe
     depart.Sommets[0] = y;
@@ -22,14 +22,20 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
 }
 
 Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
+    vector<Point> pts;
+    pts.reserve(ob1.nbr_sommets+ob2.nbr_sommets);
+    for(int i=0; ob1.Sommets.size(); i++){
+        if(!isIn(ob1.Sommets[i], pts)) pts.push_back(ob1.Sommets[i]);
+    }
+
     list<Segment>::iterator its = ob2.segValides.begin();
     for(; its!= ob2.segValides.end(); its++) ob1.segValides.push_back(*its);
-    for(int i=0; i<ob1.nbr_sommets; i++){
-        for(int  j=0; j<ob2.nbr_sommets; j++){
+    for(int i=0; i<pts.size(); i++){
+        for(int j=i+1; j<pts.size(); j++){
             its=ob1.segValides.begin();
             bool isValide = true; 
             for(; its!= ob1.segValides.end(); its++){ //on parcout tous les segments de l'obstacle 1
-                if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){ // si ontersection entre segment de ob1 et segment ij
+                if(intersect(pts[i], pts[j], its->a, its->b)){ // si intersection entre segment de ob1 et segment ij
                     isValide = false; // le segment ij est non valdie
                     break; //on arrete la vérif puisque sait deja que le segment est invalide
                 } 
@@ -38,21 +44,19 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
             // On fait la meme chose pour les semgents de l'obstacle 2
             its=ob2.segValides.begin(); 
             for(; its!= ob2.segValides.end(); its++){
-                if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){
+                if(intersect(pts[i], pts[j], its->a, its->b)){
                     isValide = false;
                     break;
                 } 
             }
             if(isValide){ // si le segment est toujorus valdie après les vérifications, on l'ajoute à la liste segValides
-                Segment newSeg = Segment(ob1.Sommets[i], ob2.Sommets[j]);
+                Segment newSeg = Segment(pts[i], pts[j]);
                 ob1.segValides.push_back(newSeg);
             }
         }
     }
-
-    ob1.nbr_sommets += ob2.nbr_sommets; // il faut vérif qu'il n'y ait pas 2 fois le même sommet 
-    // cad un meme point dans les 2 obstacles : quand concatene les 2 obstacles, les 2 points ne font plus qu'un
-    ob1.Sommets = concatenateListe(ob1.nbr_sommets, ob2.nbr_sommets, ob1.Sommets, ob2.Sommets);
+    ob1.Sommets = pts;
+    ob1.nbr_sommets = pts.size();
     return ob1;
 }
 
@@ -70,10 +74,6 @@ Point * concatenateListe(int nb1, int nb2, Point * liste1, Point * liste2){
     return res;
 }
 
-
-
-
-
 //vector<vector<double> > init
 
 
@@ -89,12 +89,12 @@ bool intersect(Point A, Point B, Point C, Point D){
 }
 
 ////////////////////////////////////////////////////////////
-
-//Construction de la matrice
-double ** buildMatrixC(Graphe g){
-    int nb = g.nb_sommets;
-    double c[nb][nb];
-
+vector<vector<double> > initC(int nb){
+    vector<vector<double> > c;
+    vector<double> ligne(nb);
+    for(int i=0; i<nb; i++){
+        c.push_back(ligne);
+    }
     //intitalisation de c
     for(int i=0; i<nb; i++){
         for(int j=0; j<nb; j++){
@@ -102,6 +102,14 @@ double ** buildMatrixC(Graphe g){
             else c[i][j] = max;
         }
     }
+    return c;
+}
+
+
+//Construction de la matrice
+vector<vector<double> > buildMatrixC(Graphe g){
+    int nb = g.nb_sommets;
+    vector<vector<double> > c = initC(nb);
     Point memory[nb];
     memory[0] = g.depart;
     memory[nb-1] = g.fin;
@@ -123,7 +131,7 @@ double ** buildMatrixC(Graphe g){
         c[a][b] = its->poid;
         c[b][a] = its->poid;
     }
-    return reinterpret_cast<double **>(c);
+    return c;
 }
 
 // renvoie l'index du point a dans la liste memory. Retourne -1 a n'est pas dans la liste
@@ -132,6 +140,13 @@ int isIn(Point a, Point *memory, int nb){
         if(a==memory[i]) return i;
     }
     return -1;
+}
+
+bool isIn(Point a, vector<Point> pts){
+    for(int i=0; i<pts.size(); i++){
+        if(a==pts[i]) return true;
+    }
+    return false;
 }
 
 int main(){
