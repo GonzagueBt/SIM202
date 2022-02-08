@@ -1,6 +1,5 @@
 #include "Dijsktra.hpp"
-
- #define max INT_MAX
+#define max INT_MAX
 
 // N nombre de sommets du graphe 
 //c  : matrice des poids du graphe (cij et le poid de l'arrete ij)
@@ -60,6 +59,18 @@ void Dijsktra(int N, vector<vector<double> > c, double *l, double *p){
     cout<<"}"<<endl;
 }
 
+//retourne le chemin le plus court entre point de départ (p[0]) et le point d'arrivée (p[-1])
+list<Point> cheminFinale(Point * memory, double * p){
+    list<Point> chemin;
+    chemin.push_front(memory[-1]);
+    int index = (int) p[-1];
+    while(p[index]!= -1){
+        chemin.push_front(memory[index]);
+        index = (int) p[index];
+    }
+    chemin.push_front(memory[0]);
+    return chemin;
+}
 
 int main(){
     vector<vector<double> > c= exempleEnonce();
@@ -123,12 +134,14 @@ vector<vector<double> > exempleEnonce(){
 }
 
 void printC(vector<vector<double> > c){
-    for(int i=0; i<c.size(); i++){
+    for(int i=0; i<(int) c.size(); i++){
         cout<<"(";
-        for(int j=0; j<c.size(); j++){
+        for(int j=0; j< (int) c.size(); j++){
             cout<<c[i][j]<<" ";
         }
         cout<<")"<<endl;
     }
     cout<<""<<endl;
 }
+
+
