@@ -1,7 +1,7 @@
 #include "Dijsktra.hpp"
-#include "parserGraphe.hpp"
-using namespace std;
-#include <iostream> 
+#include "Graphe.hpp"
+//#include "parserGraphe.hpp"
 #include <list>
 
 vector<Point> exemple();
+Obstacle buildSegValideEx(Obstacle exemple);

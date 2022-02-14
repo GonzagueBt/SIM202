@@ -4,7 +4,7 @@
 #include <list>
 extern ostream out;
 
-int main(){
+/**int main(){
     Point a(2,2);
     Point b(5,2);
     Point c(6,3);
@@ -17,7 +17,7 @@ int main(){
     Segment test2(a,b);
 
     test.segValides.push_back(test2);
-}
+}**/
 
 Point Obstacle::operator[](int i) const
 {
@@ -145,7 +145,7 @@ bool Obstacle::inte_exte(const Point & P, const Obstacle &Obs)
 }
 
 
-list<Segment> Obstacle::constructionSeg(Point *x, int n)
+list<Segment> Obstacle::constructionSeg(vector<Point> x, int n)
 {
     //segValides.push_back(Segment a);
     /*if (concave_convexe(Obs) == true)
@@ -154,10 +154,10 @@ list<Segment> Obstacle::constructionSeg(Point *x, int n)
         // réfélechir */
 }
 
-Obstacle::Obstacle(Point *x, int n){
+Obstacle::Obstacle(vector<Point> x, int n){
     nbr_sommets = n;
     Sommets = x;
-    segValides = constructionSeg(x,n);
+    //segValides = constructionSeg(x,n);
 
 }
 

@@ -1,7 +1,7 @@
-#include "Point.hpp"
 #include "Arc.hpp"
 #include <iostream> 
 #include <list>
+#include <vector>
 using namespace std;
 #ifndef Project_H
 #define Project_H
@@ -12,15 +12,15 @@ class Obstacle
 {
 public:
     int nbr_sommets;                            
-    Point *Sommets; 
+    vector<Point> Sommets; 
     list<Segment> segValides;
-    Obstacle(Point *x = nullptr, int n=0): Sommets(x), nbr_sommets(n) {} // Constructeur par défaut                       
-    ~Obstacle(); // Destructeur                     
-    Obstacle(const Obstacle &Obs); // Constructeur par copie  
+    Obstacle(vector<Point> x, int n=0); // Constructeur par défaut                       
+    //~Obstacle(); // Destructeur                     
+    //Obstacle(const Obstacle &Obs); // Constructeur par copie  
     Point operator[](int i) const; // opérateur d'accès aux sommets de l'obstacle       
     bool concave_convexe(const Obstacle &Obs); // true = obstacle convexe, false = obstacle concave
     bool inte_exte(const Point & P, const Obstacle &Obs); // true = point P à l'extérieur de l'obstacle, false = point P à l'intérieur de l'obstacle
-    list<Segment> constructionSeg(Point *x, int n);
+    list<Segment> constructionSeg(vector<Point> x, int n);
            
 };
 

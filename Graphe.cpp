@@ -6,36 +6,55 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
     fin = y;
     list<Obstacle>::iterator its=obst.begin();
     Obstacle final= *its;
-    its++;
-    while(its!= obst.end()){ // on ajoute un par un les obstacles (on ajoute à la liste des segments les segments entre obstacles)
-        final = sumObstacles(final, *its);
-        its++;
+    cout<<"premier obstacle"<<endl;
+    int cpt=1;
+    if(obst.size()!=1){ 
+        its++; //gestion cas un seul obstacle
+        cout<<"début boucle "<<endl;
+        for(; its!= obst.end(); its++){// on ajoute un par un les obstacles (on ajoute à la liste des segments les segments entre obstacles)
+            cout<<"ajout d'un obstacle :"<<cpt<<endl;
+            final = sumObstacles(final, *its);
+            cout<<"ajout obstacle réussi !"<<endl;
+            cpt++;
+        }
     }
+    cout<<"obstacles tous assemblés"<<endl;
     vector<Point> dep;
     dep.push_back(x);
     Obstacle depart(dep, 1);
+    cout<<"Ajout point de départ"<<endl;
     final = sumObstacles(final, depart); //traitement des segments entre le point de départ et et les sommets du graphe
+    cout<<"point de départ ajouté"<<endl;
     depart.Sommets[0] = y;
+    cout<<"ajout point de fin"<<endl;
     final = sumObstacles(final, depart);  //traitement des segments entre le point de fin et et les sommets du graphe
+    cout<<"point de fin ajouté"<<endl;
     graphe_ = final.segValides;
     nb_sommets = final.nbr_sommets;
 }
 
 Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     vector<Point> pts;
+    cout<<"intialisation liste de points"<<endl;
     pts.reserve(ob1.nbr_sommets+ob2.nbr_sommets);
-    for(int i=0; ob1.Sommets.size(); i++){
+    cout<<"nombre de sommets totale maximum : "<<ob1.nbr_sommets+ob2.nbr_sommets<<endl;
+    for(int i=0; i< (int) ob1.Sommets.size(); i++){
         if(!isIn(ob1.Sommets[i], pts)) pts.push_back(ob1.Sommets[i]);
     }
-
+    for(int i=0; i< (int) ob2.Sommets.size(); i++){
+        if(!isIn(ob2.Sommets[i], pts)) pts.push_back(ob2.Sommets[i]);
+    }
+    cout<<"nombre de sommets totale après suppression des doubles : "<<pts.size()<<endl;
+    cout<<"liste de points des 2 obstacles construites"<<endl;
     list<Segment>::iterator its = ob2.segValides.begin();
     for(; its!= ob2.segValides.end(); its++) ob1.segValides.push_back(*its);
-    for(int i=0; i< (int) pts.size(); i++){
-        for(int j=i+1; j< (int) pts.size(); j++){
+    cout<<"segments valides des 2 obstacles réunis ("<<ob1.segValides.size()<<")"<<endl;
+    for(int i=0; i< (int) ob1.Sommets.size(); i++){
+        for(int j=0; j< (int) ob2.Sommets.size(); j++){
             its=ob1.segValides.begin();
             bool isValide = true; 
             for(; its!= ob1.segValides.end(); its++){ //on parcout tous les segments de l'obstacle 1
-                if(intersect(pts[i], pts[j], its->a, its->b)){ // si intersection entre segment de ob1 et segment ij
+                if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){ // si intersection entre segment de ob1 et segment ij
                     isValide = false; // le segment ij est non valdie
                     break; //on arrete la vérif puisque sait deja que le segment est invalide
                 } 
@@ -44,14 +63,15 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
             // On fait la meme chose pour les semgents de l'obstacle 2
             its=ob2.segValides.begin(); 
             for(; its!= ob2.segValides.end(); its++){
-                if(intersect(pts[i], pts[j], its->a, its->b)){
+                if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){
                     isValide = false;
                     break;
                 } 
             }
             if(isValide){ // si le segment est toujorus valdie après les vérifications, on l'ajoute à la liste segValides
-                Segment newSeg = Segment(pts[i], pts[j]);
+                Segment newSeg = Segment(ob1.Sommets[i], ob1.Sommets[j]);
                 ob1.segValides.push_back(newSeg);
+                cout<<"segment entre point "<<ob1.Sommets[i]<<" et "<<ob1.Sommets[j]<<" ajouté"<<endl;
             }
         }
     }
@@ -76,7 +96,7 @@ bool intersect(Point A, Point B, Point C, Point D){
 ////////////////////////////////////////////////////////////
 
 
-vector<vector<double> > initC(int nb){
+/**vector<vector<double> > initC(int nb){
     vector<vector<double> > c;
     vector<double> ligne(nb);
     for(int i=0; i<nb; i++){
@@ -90,7 +110,7 @@ vector<vector<double> > initC(int nb){
         }
     }
     return c;
-}
+}**/
 
 
 //Construction de la matrice
@@ -132,7 +152,7 @@ int isIn(Point a, Point * memory, int nb){
 //renvoie true si le point a est dans le vecteur de Point pts. Retourne false sinon
 bool isIn(Point a, vector<Point> pts){
     for(int i=0; i< (int) pts.size(); i++){
-        if(a==pts[i]) return true;
+        if(a==pts[i])return true; 
     }
     return false;
 }

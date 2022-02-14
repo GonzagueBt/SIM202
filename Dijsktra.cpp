@@ -72,7 +72,7 @@ list<Point> cheminFinale(Point * memory, double * p){
     return chemin;
 }
 
-int main(){
+/**int main(){
     vector<vector<double> > c= exempleEnonce();
     int N=5;
     double l[N];
@@ -91,7 +91,7 @@ int main(){
     cout<<"}"<<endl;
 
     return 0;
-}
+}**/
 
 vector<vector<double> > initC(int nb){
     vector<vector<double> > c;
