@@ -1,52 +1,39 @@
+#ifndef Obstacle_H
+#define Obstacle_H
 #include "Arc.hpp"
-#include <iostream> 
 #include <list>
 #include <vector>
-using namespace std;
-#ifndef Project_H
-#define Project_H
-
 
 
 class Obstacle
 {
 public:
     int nbr_sommets;                            
-    vector<Point> Sommets; 
+    vector<Point> Sommets;
     list<Segment> segValides;
-    Obstacle(vector<Point> x, int n=0); // Constructeur par défaut                       
-    //~Obstacle(); // Destructeur                     
-    //Obstacle(const Obstacle &Obs); // Constructeur par copie  
-    Point operator[](int i) const; // opérateur d'accès aux sommets de l'obstacle       
-    bool concave_convexe(const Obstacle &Obs); // true = obstacle convexe, false = obstacle concave
-    bool inte_exte(const Point & P, const Obstacle &Obs); // true = point P à l'extérieur de l'obstacle, false = point P à l'intérieur de l'obstacle
-    list<Segment> constructionSeg(vector<Point> x, int n);
-           
+    Obstacle(vector<Point> P, int n=0): nbr_sommets(n), Sommets(P) {}                                            
+    bool concave_convexe(); // true = obstacle convexe, false = obstacle concave
+    list<Segment> constructionSeg(); // remplit une liste de segments valides        
 };
 
-
-
-// structure utilisée dans les fonctions ci-dessous
-struct Point_et_Indice
-{
-    int i; 
-    Point point; 
-};
 
 // Calcul des coordonnées (2 points) des deux extrélités de la normale d'un segment
-Point * Coor_Sommets_Normale(const Point & S_1, const Point & S_2);
+vector<Point> Coor_Sommets_Normale(const Point & S_1, const Point & S_2);
 
 // Calcul des coordonnées du vecteur normale (1 point)
-Point Coor_Vecteur_normale(const Point & S_1, const Point & S_2);
+Point Coor_Vecteur_Normale(const Point & S_1, const Point & S_2);
 
-// Retorune le sommet de l'obstacle le plus proche du point A ainsi que le numéro du sommet en question
-Point_et_Indice Trouver_Sommet_le_plus_proche(const Point &A, const Obstacle &Obs);
+// ccw = outils pour intersect
+// intersect renvoie true si AB intersecte CD
+bool ccw(const Point & A,const Point &B,const Point &C);
+bool intersect(const Point &A, const Point &B, const Point &C, const Point &D); 
 
-// Produit scalaire classique entre 2 segments
-double Produit_Scalaire(const Point & a, const Point & b);
+// Renvoie l'angle algébrique entre les segments (a,b) et (b,c)
+bool transfo(const Point & a, const Point & b, const Point & c);
 
 
 
 
 
 #endif
+
