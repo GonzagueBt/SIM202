@@ -31,6 +31,9 @@ bool intersect(const Point &A, const Point &B, const Point &C, const Point &D);
 // Renvoie l'angle algébrique entre les segments (a,b) et (b,c)
 bool transfo(const Point & a, const Point & b, const Point & c);
 
+// Fonction de construction globale 
+Obstacle ConstructObstacle(vector<Point> V);
+
 
 
 
