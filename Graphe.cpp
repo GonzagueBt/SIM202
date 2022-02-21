@@ -60,7 +60,7 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
                 //Obligé de vérif si le segment que l'on parcours n'a pas un de ces 2 sommets égales au sommet que l'on test
                 //pour créer un segment, sinon l'algo d'intersection va considérer que il y a une intersection parce que sommet commun
                 if(its->a==ob1.Sommets[i] || its->b==ob1.Sommets[i] || its->a==ob2.Sommets[j] || its->b==ob2.Sommets[j]) continue;
-                if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){ // si intersection entre segment de ob1 et segment ij
+                if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b) || isIn(ob2.Sommets[j],ob1.Sommets) || isIn(ob1.Sommets[i],ob2.Sommets)){ // si intersection entre segment de ob1 et segment ij
                     isValide = false; // le segment ij est non valdie
                     break; //on arrete la vérif puisque sait deja que le segment est invalide
                 } 

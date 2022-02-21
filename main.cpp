@@ -9,19 +9,23 @@ int main(){
     exemple.push_back(Point(2,3));
     Obstacle ob1 = ConstructObstacle(exemple);
     printSegValides(ob1.segValides);
-    return 0;**/
+    **/
     cout<<"=========== Initialisation Graphe ==========="<<endl;
     Obstacle ob1 = ConstructObstacle(exemple());
     printSegValides(ob1.segValides);
-    list<Obstacle> Obstacle;
-    Obstacle.push_back(ob1);
+    list<Obstacle> Obstacles;
+    //Obstacles.push_back(ob1);
+    Obstacle ob2 = ConstructObstacle(exemple2());
+    Obstacles.push_back(ob2);
+    Obstacle ob3 = ConstructObstacle(exemple3());
+    Obstacles.push_back(ob3);
     cout<<"liste obstacle construite"<<endl;
     Point depart(0,0);
-    Point fin(0,3);
+    Point fin(3,0);
     cout<<"Point depart et fin construit"<<endl;
     cout<<endl;
     cout<<"=========== Construction Graphe ==========="<<endl;
-    Graphe g(Obstacle, depart, fin);
+    Graphe g(Obstacles, depart, fin);
     cout<<"graphe f contruit"<<endl;
     printSegValides(g.graphe_);
     Point memory[g.nb_sommets];
@@ -51,10 +55,28 @@ vector<Point> exemple(){
     exemple.push_back(Point(2,4));
     exemple.push_back(Point(1,4));
     exemple.push_back(Point(1,2));
-    exemple.push_back(Point(-1,1));
+    exemple.push_back(Point(-1,2));
     exemple.push_back(Point(-1,4));
     exemple.push_back(Point(-2,4));
     exemple.push_back(Point(-2,1));
+    return exemple;
+}
+
+vector<Point> exemple2(){
+    vector<Point> exemple;
+    exemple.push_back(Point(2,-1));
+    exemple.push_back(Point(4,-1));
+    exemple.push_back(Point(4,1));
+    exemple.push_back(Point(2,1));
+    return exemple;
+}
+
+vector<Point> exemple3(){
+    vector<Point> exemple;
+    exemple.push_back(Point(1,-2));
+    exemple.push_back(Point(5,-2));
+    exemple.push_back(Point(5,2));
+    exemple.push_back(Point(1,-2));
     return exemple;
 }
 
