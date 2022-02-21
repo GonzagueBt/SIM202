@@ -18,7 +18,7 @@ Graphe : Graphe.o Obstacle.o Arc.o Point.o
 
 m : 
 	make clean
-	make Graphe
+	make 
 	./main
 
 d : 

@@ -106,7 +106,7 @@ void printCheminFinale(list<Point> chemin){
     return 0;
 }**/
 
-vector<vector<double> > initC(int nb){
+/**vector<vector<double> > initC(int nb){
     vector<vector<double> > c;
     vector<double> ligne(nb);
     for(int i=0; i<nb; i++){
@@ -120,31 +120,7 @@ vector<vector<double> > initC(int nb){
         }
     }
     return c;
-}
-
-//Exemple de l'énoncé avec 5 points
-vector<vector<double> > exempleEnonce(){
-    vector<vector<double> > c;
-    c = initC(5);
-    c[0][1]=15;
-    c[1][0]=15;
-    c[0][4]=4;
-    c[4][0]=4;
-    c[2][1]=3;
-    c[1][2]=3;
-    c[2][3]=2;
-    c[3][2]=2;
-    c[3][0]=10;
-    c[0][3]=10;
-    c[3][1]=3;
-    c[1][3]=3;
-    c[4][2]=7;
-    c[2][4]=7;
-    c[4][3]=5;
-    c[3][4]=5;
-    printC(c);
-    return c;
-}
+}**/
 
 void printC(vector<vector<double> > c){
     for(int i=0; i<(int) c.size(); i++){

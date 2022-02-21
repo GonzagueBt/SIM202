@@ -101,7 +101,7 @@ void printSegValides(list<Segment> liste){
 ////////////////////////////////////////////////////////////
 
 
-/**vector<vector<double> > initC(int nb){
+vector<vector<double> > initC(int nb){
     vector<vector<double> > c;
     vector<double> ligne(nb);
     for(int i=0; i<nb; i++){
@@ -115,7 +115,7 @@ void printSegValides(list<Segment> liste){
         }
     }
     return c;
-}**/
+}
 
 
 //Construction de la matrice
