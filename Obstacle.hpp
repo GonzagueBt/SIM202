@@ -1,6 +1,6 @@
 #ifndef Obstacle_H
 #define Obstacle_H
-#include "Arc.hpp"
+#include "Arc.hpp" 
 #include <list>
 #include <vector>
 
@@ -13,9 +13,14 @@ public:
     list<Segment> segValides;
     Obstacle(vector<Point> P, int n=0): nbr_sommets(n), Sommets(P) {}                                            
     bool concave_convexe(); // true = obstacle convexe, false = obstacle concave
-    list<Segment> constructionSeg(); // remplit une liste de segments valides        
+    list<Segment> constructionSeg(); // rempli une liste de segments valides
+   
+    // Obstacle Padding(const int &r);
+           
 };
 
+// afficher des segments
+void printSegValides(list<Segment> liste);
 
 // Calcul des coordonnées (2 points) des deux extrélités de la normale d'un segment
 vector<Point> Coor_Sommets_Normale(const Point & S_1, const Point & S_2);
@@ -35,8 +40,4 @@ bool transfo(const Point & a, const Point & b, const Point & c);
 Obstacle ConstructObstacle(vector<Point> V);
 
 
-
-
-
 #endif
-
