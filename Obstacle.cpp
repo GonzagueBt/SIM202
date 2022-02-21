@@ -2,6 +2,14 @@
 #include "Arc.hpp"
 #include "Obstacle.hpp"
 
+void printSegValides(list<Segment> liste){
+    cout<<"Liste des segments valides du graphe : "<<endl;
+    list<Segment>::iterator its = liste.begin();
+    for(; its!= liste.end(); its++){
+        cout<<"("<<its->a<<","<<its->b<<")  ";
+    }
+    cout<<endl;
+}
 
 Point Coor_Vecteur_Normale(const Point & S_1, const Point & S_2)
 {
@@ -129,6 +137,12 @@ list<Segment> Obstacle::constructionSeg()
     return segValides;
 }
 
+
+/*Obstacle Obstacle::Padding(const int &r)
+{
+
+*/
+
 Obstacle ConstructObstacle(vector<Point> V)
 {
     int n; n = V.size();
@@ -136,3 +150,5 @@ Obstacle ConstructObstacle(vector<Point> V)
     list<Segment> SegValides; SegValides = Obs.constructionSeg();
     return Obs;
 }
+
+
