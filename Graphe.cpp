@@ -19,6 +19,7 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
         }
     }
     cout<<"obstacles tous assemblés"<<endl;
+    printSegValides(final.segValides);
     vector<Point> dep;
     dep.push_back(x);
     Obstacle depart(dep, 1);
@@ -39,7 +40,7 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     pts.reserve(ob1.nbr_sommets+ob2.nbr_sommets);
     cout<<"nombre de sommets totale maximum : "<<ob1.nbr_sommets+ob2.nbr_sommets<<endl;
     for(int i=0; i< (int) ob1.Sommets.size(); i++){
-        if(!isIn(ob1.Sommets[i], pts)) pts.push_back(ob1.Sommets[i]);
+        pts.push_back(ob1.Sommets[i]);
     }
     for(int i=0; i< (int) ob2.Sommets.size(); i++){
         if(!isIn(ob2.Sommets[i], pts)) pts.push_back(ob2.Sommets[i]);
@@ -48,30 +49,39 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     cout<<"liste de points des 2 obstacles construites"<<endl;
     list<Segment>::iterator its = ob2.segValides.begin();
     for(; its!= ob2.segValides.end(); its++) ob1.segValides.push_back(*its);
+    printSegValides(ob1.segValides); ////////////////////////////////////////////////////////////////////////////////////////////////
     cout<<"segments valides des 2 obstacles réunis ("<<ob1.segValides.size()<<")"<<endl;
     for(int i=0; i< (int) ob1.Sommets.size(); i++){
         for(int j=0; j< (int) ob2.Sommets.size(); j++){
+            cout<<"je fais le sommet : "<<ob1.Sommets[i]<<" avec le sommet : "<<ob2.Sommets[j]<<endl;
             its=ob1.segValides.begin();
             bool isValide = true; 
             for(; its!= ob1.segValides.end(); its++){ //on parcout tous les segments de l'obstacle 1
+                //Obligé de vérif si le segment que l'on parcours n'a pas un de ces 2 sommets égales au sommet que l'on test
+                //pour créer un segment, sinon l'algo d'intersection va considérer que il y a une intersection parce que sommet commun
+                if(its->a==ob1.Sommets[i] || its->b==ob1.Sommets[i] || its->a==ob2.Sommets[j] || its->b==ob2.Sommets[j]) continue;
                 if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){ // si intersection entre segment de ob1 et segment ij
+                    if(ob1.Sommets[i].x==2 && ob1.Sommets[i].y==3){
+                        cout<<"intersect avec l'arc : ("<<its->a<<", "<<its->b<<")"<<endl;
+                    }
                     isValide = false; // le segment ij est non valdie
                     break; //on arrete la vérif puisque sait deja que le segment est invalide
                 } 
             }
-            if(!isValide) break; // si le semgent est deja invalide, cela ne sert à rien de continuer la vérif
+            if(!isValide) continue; // si le semgent est deja invalide, cela ne sert à rien de continuer la vérif
             // On fait la meme chose pour les semgents de l'obstacle 2
             its=ob2.segValides.begin(); 
             for(; its!= ob2.segValides.end(); its++){
+                if(its->a==ob1.Sommets[i] || its->b==ob1.Sommets[i] || its->a==ob2.Sommets[j] || its->b==ob2.Sommets[j]) continue;
                 if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){
                     isValide = false;
                     break;
                 } 
             }
             if(isValide){ // si le segment est toujorus valdie après les vérifications, on l'ajoute à la liste segValides
-                Segment newSeg = Segment(ob1.Sommets[i], ob1.Sommets[j]);
+                Segment newSeg = Segment(ob1.Sommets[i], ob2.Sommets[j]);
                 ob1.segValides.push_back(newSeg);
-                cout<<"segment entre point "<<ob1.Sommets[i]<<" et "<<ob1.Sommets[j]<<" ajouté"<<endl;
+                cout<<"segment entre point "<<ob1.Sommets[i]<<" et "<<ob2.Sommets[j]<<" ajouté"<<endl;
             }
         }
     }
@@ -80,18 +90,13 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     return ob1;
 }
 
-
-
-
-//////// Intersection entre 2 segments AB et CD /////////
-// https://bryceboe.com/2006/10/23/line-segment-intersection-algorithm/
-
-bool ccw(Point A, Point B, Point C){
-    return ((C.y-A.y) * (B.x-A.x)) > ((B.y-A.y) * (C.x-A.x));
-}
-
-bool intersect(Point A, Point B, Point C, Point D){
-    return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D);
+void printSegValides(list<Segment> liste){
+    cout<<"Liste des segments valides du graphe : "<<endl;
+    list<Segment>::iterator its = liste.begin();
+    for(; its!= liste.end(); its++){
+        cout<<"("<<its->a<<","<<its->b<<")  ";
+    }
+    cout<<endl;
 }
 ////////////////////////////////////////////////////////////
 
@@ -139,6 +144,20 @@ vector<vector<double> > buildMatrixC(Point * memory, Graphe g){
         c[b][a] = its->poid;
     }
     return c;
+}
+
+void printMatricC(vector<vector<double> > c, Point * memory, int nb){
+    cout<<"Matrice C : "<<endl;
+    for(int i=0; i<nb; i++){
+        cout<<memory[i]<<" ";
+    }
+    cout<<endl;
+    for(int i=0; i< (int) c.size(); i++){
+        for(int j=0; j < (int) c[0].size(); j++){
+            cout<<c[i][j]<< " ";
+        }
+        cout<<endl;
+    }
 }
 
 // renvoie l'index du point a dans la liste memory. Retourne -1 a n'est pas dans la liste

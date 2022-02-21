@@ -57,19 +57,32 @@ void Dijsktra(int N, vector<vector<double> > c, double *l, double *p){
         cout<<l[i]<<" ";
     }
     cout<<"}"<<endl;
+    cout<<"p={";
+    for(int i=0; i<N; i++){
+        cout<<p[i]<<" ";
+    }
+    cout<<"}"<<endl;
 }
 
 //retourne le chemin le plus court entre point de départ (p[0]) et le point d'arrivée (p[-1])
-list<Point> cheminFinale(Point * memory, double * p){
+list<Point> cheminFinale(Point * memory, double * p, int nb){
     list<Point> chemin;
-    chemin.push_front(memory[-1]);
-    int index = (int) p[-1];
+    chemin.push_front(memory[nb-1]);
+    int index = (int) p[nb-1];
     while(p[index]!= -1){
         chemin.push_front(memory[index]);
         index = (int) p[index];
     }
     chemin.push_front(memory[0]);
     return chemin;
+}
+
+void printCheminFinale(list<Point> chemin){
+    list<Point>::iterator its = chemin.begin();
+    for(; its!= chemin.end(); its++){
+        cout<<"("<<its->x<<","<<its->y<<") ";
+    }
+    cout<<endl;
 }
 
 /**int main(){

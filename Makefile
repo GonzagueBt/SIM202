@@ -16,10 +16,10 @@ Dijsktra : Dijsktra.o Arc.o Point.o
 Graphe : Graphe.o Obstacle.o Arc.o Point.o
 	$(CXX) -o Graphe $^
 
-g : 
+m : 
 	make clean
 	make Graphe
-	./Graphe
+	./main
 
 d : 
 	make clean
@@ -37,6 +37,7 @@ clean:
 	rm -rf main
 	rm -rf Dijsktra
 	rm -rf Graphe
+	rm -rf Graphe.txt
 
  
 mrproper: clean
