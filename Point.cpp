@@ -27,7 +27,7 @@ ostream & operator <<(ostream & os, const Point &P)
 Point operator|(const Point &u, const Point &v)
 {
     Point res;
-    res.x = abs(u.x - v.x);
-    res.y = abs(u.y - v.y);
+    res.x = v.x - u.x;
+    res.y = v.y - u.y;
     return res;
 }
