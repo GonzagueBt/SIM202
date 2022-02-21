@@ -61,9 +61,6 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
                 //pour créer un segment, sinon l'algo d'intersection va considérer que il y a une intersection parce que sommet commun
                 if(its->a==ob1.Sommets[i] || its->b==ob1.Sommets[i] || its->a==ob2.Sommets[j] || its->b==ob2.Sommets[j]) continue;
                 if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){ // si intersection entre segment de ob1 et segment ij
-                    if(ob1.Sommets[i].x==2 && ob1.Sommets[i].y==3){
-                        cout<<"intersect avec l'arc : ("<<its->a<<", "<<its->b<<")"<<endl;
-                    }
                     isValide = false; // le segment ij est non valdie
                     break; //on arrete la vérif puisque sait deja que le segment est invalide
                 } 
@@ -90,14 +87,6 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     return ob1;
 }
 
-void printSegValides(list<Segment> liste){
-    cout<<"Liste des segments valides du graphe : "<<endl;
-    list<Segment>::iterator its = liste.begin();
-    for(; its!= liste.end(); its++){
-        cout<<"("<<its->a<<","<<its->b<<")  ";
-    }
-    cout<<endl;
-}
 ////////////////////////////////////////////////////////////
 
 

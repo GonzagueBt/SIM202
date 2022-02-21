@@ -19,7 +19,6 @@ class Graphe{
 
 
 Obstacle sumObstacles(Obstacle ob1, Obstacle ob2);
-void printSegValides(list<Segment> liste);
 Point * concatenateListe(int nb1, int nb2, Point * liste1, Point * liste2);
 vector<vector<double> > buildMatrixC(Point * memory, Graphe g);
 void printMatricC(vector<vector<double> > c, Point * memory, int nb);
