@@ -71,26 +71,31 @@ bool transfo(const Point & a, const Point & b, const Point & c)
 }
 
 
-bool Obstacle::concave_convexe(){
+bool Obstacle::concave_convexe()
+{
     if(this->nbr_sommets==1) return true; // ajout pour gestion facile point de départ et d'arrivée dans Graphe
     // si l'angle algébrique entre deux normales est < 0, l'angle est obtu donc les deux normales ne s'intersectent pas
     // il faut que tout couple de normales consécutives de notre obstacle vérifie cela pour que l'obstacle soit convexe
     int k = 0; // compteur pour pouvoir conclure à la fin des boucles
-    for (int i = 0; i < this->nbr_sommets - 2; i++) {
-        if (transfo(this->Sommets[i], this->Sommets[i+1], this->Sommets[i+2]) == false) k += 1;
+    for (int i = 0; i < this->nbr_sommets - 2; i++) 
+    {
+        if (transfo(this->Sommets[i], this->Sommets[i+1], this->Sommets[i+2]) == false)
+            k += 1;
     }
-    if (transfo(this->Sommets[this->nbr_sommets - 2], this->Sommets[this->nbr_sommets - 1], this->Sommets[0]) == false){ 
-        k += 1; }
-    if (transfo(this->Sommets[this->nbr_sommets - 1], this->Sommets[0], this->Sommets[1]) == false){
-        k += 1; }
-    if (k == this->nbr_sommets) return false;
-    return true;
+    if (transfo(this->Sommets[this->nbr_sommets - 2], this->Sommets[this->nbr_sommets - 1], this->Sommets[0]) == false) 
+        k += 1;
+    if (transfo(this->Sommets[this->nbr_sommets - 1], this->Sommets[0], this->Sommets[1]) == false)
+        k += 1; 
+    if (k == this->nbr_sommets)
+        return true;
+    else
+        return false;
 }
 
 
 list<Segment> Obstacle::constructionSeg()
 {
-    if (this->concave_convexe() == true) // on remplit la liste des segments valides en faisant le tour de l'obstacle
+    if (concave_convexe() == true) // on remplit la liste des segments valides en faisant le tour de l'obstacle
     {
         for(int i = 0; i < this->nbr_sommets -1; i++)
         {
@@ -133,15 +138,18 @@ list<Segment> Obstacle::constructionSeg()
 }
 
 
-/*Obstacle Obstacle::Padding(const int &r)
+/* Obstacle Obstacle::Padding(const int &r)
 {
+ 
+} */
 
-*/
 
-Obstacle ConstructObstacle(vector<Point> V){
-    Obstacle Obs(V,V.size());
-    Obs.constructionSeg();
+Obstacle ConstructObstacle(vector<Point> V)
+{
+    int n; n = V.size();
+    list<Segment> SegValides; 
+    Obstacle Obs(V, n);
+    SegValides = Obs.constructionSeg();
     return Obs;
 }
-
 
