@@ -11,7 +11,7 @@ public:
     int nbr_sommets;                            
     vector<Point> Sommets;
     list<Segment> segValides;
-    Obstacle(vector<Point> P, int n=0): nbr_sommets(n), Sommets(P) {}                                            
+    Obstacle(vector<Point> P, int n = 0): nbr_sommets(n), Sommets(P) {}                                            
     bool concave_convexe(); // true = obstacle convexe, false = obstacle concave
     list<Segment> constructionSeg(); // rempli une liste de segments valides
    
@@ -41,3 +41,4 @@ Obstacle ConstructObstacle(vector<Point> V);
 
 
 #endif
+
