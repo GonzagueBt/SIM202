@@ -128,3 +128,11 @@ list<Segment> Obstacle::constructionSeg()
     }
     return segValides;
 }
+
+Obstacle ConstructObstacle(vector<Point> V)
+{
+    int n; n = V.size();
+    Obstacle Obs(V,n);
+    list<Segment> SegValides; SegValides = Obs.constructionSeg();
+    return Obs;
+}
