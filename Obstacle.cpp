@@ -157,3 +157,18 @@ Obstacle ConstructObstacle(vector<Point> V)
     return Obs;
 }
 
+
+//renvoie true si le point x est à l'extérieur OU sur un coté de l'obstacle
+//renvoie false si le point est à l'intérieur strictement du polygone
+bool isOutside(Point x, Obstacle ob){
+    Point y(x.x, INT_MAX);
+    int cpt = 0;
+    list<Segment>::iterator its = ob.segValides_contour.begin();
+    for(; its!= ob.segValides_contour.end(); its++){
+        if(intersect(its->a, its->b, x, y)){
+            cpt++;
+        }
+    }
+    if(cpt%2 == 0) return true;
+    return false;
+}

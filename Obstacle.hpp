@@ -41,6 +41,8 @@ bool transfo(const Point & a, const Point & b, const Point & c);
 // Fonction de construction globale 
 Obstacle ConstructObstacle(vector<Point> V);
 
+bool isOutside(Point x, Obstacle ob);
+
 
 #endif
 
