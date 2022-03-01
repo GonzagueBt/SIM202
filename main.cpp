@@ -12,22 +12,23 @@ int main(){
     **/
     cout<<"=========== Initialisation Graphe ==========="<<endl;
     Obstacle ob1 = ConstructObstacle(exemple());
-    printSegValides(ob1.segValides);
+    printSegValides(ob1.segValides_contour);
+    printSegValides(ob1.segValides_reste);
     list<Obstacle> Obstacles;
-    //Obstacles.push_back(ob1);
+    Obstacles.push_back(ob1);
     Obstacle ob2 = ConstructObstacle(exemple2());
     Obstacles.push_back(ob2);
     Obstacle ob3 = ConstructObstacle(exemple3());
-    Obstacles.push_back(ob3);
+    //Obstacles.push_back(ob3);
     cout<<"liste obstacle construite"<<endl;
     Point depart(0,0);
-    Point fin(3,0);
+    Point fin(2,5);
     cout<<"Point depart et fin construit"<<endl;
     cout<<endl;
     cout<<"=========== Construction Graphe ==========="<<endl;
     Graphe g(Obstacles, depart, fin);
     cout<<"graphe f contruit"<<endl;
-    printSegValides(g.graphe_);
+    printSegValides(g.graphe_All);
     Point memory[g.nb_sommets];
     cout<<endl;
     cout<<"=========== Construction Matrice c ==========="<<endl;
@@ -64,10 +65,10 @@ vector<Point> exemple(){
 
 vector<Point> exemple2(){
     vector<Point> exemple;
-    exemple.push_back(Point(2,-1));
-    exemple.push_back(Point(4,-1));
-    exemple.push_back(Point(4,1));
     exemple.push_back(Point(2,1));
+    exemple.push_back(Point(4,1));
+    exemple.push_back(Point(4,4));
+    exemple.push_back(Point(2,4));
     return exemple;
 }
 
@@ -77,13 +78,5 @@ vector<Point> exemple3(){
     exemple.push_back(Point(5,-2));
     exemple.push_back(Point(5,2));
     exemple.push_back(Point(1,-2));
-    return exemple;
-}
-
-Obstacle buildSegValideEx(Obstacle exemple){
-    exemple.segValides.push_back(Segment(exemple.Sommets[0],exemple.Sommets[1]));
-    exemple.segValides.push_back(Segment(exemple.Sommets[1], exemple.Sommets[2]));
-    exemple.segValides.push_back(Segment(exemple.Sommets[2], exemple.Sommets[3]));
-    exemple.segValides.push_back(Segment(exemple.Sommets[3], exemple.Sommets[0]));
     return exemple;
 }

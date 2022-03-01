@@ -3,7 +3,6 @@
 #include "Obstacle.hpp"
 
 void printSegValides(list<Segment> liste){
-    cout<<"Liste des segments valides du graphe : "<<endl;
     list<Segment>::iterator its = liste.begin();
     for(; its!= liste.end(); its++){
         cout<<"("<<its->a<<","<<its->b<<")  ";

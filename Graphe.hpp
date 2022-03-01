@@ -11,14 +11,17 @@ class Graphe{
     public :
         Point depart;
         Point fin; 
-        list<Segment> graphe_;
+        list<Segment> graphe_Obst;
+        list<Segment> graphe_Autre;
+        list<Segment> graphe_All;
         int nb_sommets;
         Graphe(list<Obstacle> obstacles, Point x, Point y);
-
+        void concateListe();
 };
 
 
 Obstacle sumObstacles(Obstacle ob1, Obstacle ob2);
+list<Segment> deleteSegCommun(list<Segment>  liste);
 Point * concatenateListe(int nb1, int nb2, Point * liste1, Point * liste2);
 vector<vector<double> > buildMatrixC(Point * memory, Graphe g);
 void printMatricC(vector<vector<double> > c, Point * memory, int nb);

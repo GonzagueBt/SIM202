@@ -1,6 +1,7 @@
 #include "Graphe.hpp"
 
 
+
 Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
     depart = x;
     fin = y;
@@ -19,18 +20,28 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
         }
     }
     cout<<"obstacles tous assemblés"<<endl;
-    printSegValides(final.segValides);
+    cout<<"Liste des segments valides des obstacles du graphe : "<<endl;
+    printSegValides(final.segValides_contour);
+    cout<<"Liste des segments valides entre les obstacles du graphe : "<<endl;
+    printSegValides(final.segValides_reste);
     vector<Point> dep;
     dep.push_back(x);
     Obstacle depart(dep, 1);
     cout<<"Ajout point de départ"<<endl;
     final = sumObstacles(final, depart); //traitement des segments entre le point de départ et et les sommets du graphe
     cout<<"point de départ ajouté"<<endl;
-    depart.Sommets[0] = y;
+    //depart.Sommets[0] = y;
+    vector<Point> fin;
+    fin.push_back(y);
+    Obstacle end(fin, 1);
     cout<<"ajout point de fin"<<endl;
-    final = sumObstacles(final, depart);  //traitement des segments entre le point de fin et et les sommets du graphe
+    final = sumObstacles(final, end);  //traitement des segments entre le point de fin et et les sommets du graphe
     cout<<"point de fin ajouté"<<endl;
-    graphe_ = final.segValides;
+    printSommet(final.Sommets);
+    cout<<"gestion segment valide commun à 2 obstacles (devient invalide)"<<endl;
+    graphe_Obst = deleteSegCommun(final.segValides_contour);
+    graphe_Autre = deleteSegCommun(final.segValides_reste);
+    concateListe();
     nb_sommets = final.nbr_sommets;
 }
 
@@ -47,16 +58,21 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     }
     cout<<"nombre de sommets totale après suppression des doubles : "<<pts.size()<<endl;
     cout<<"liste de points des 2 obstacles construites"<<endl;
-    list<Segment>::iterator its = ob2.segValides.begin();
-    for(; its!= ob2.segValides.end(); its++) ob1.segValides.push_back(*its);
-    printSegValides(ob1.segValides); ////////////////////////////////////////////////////////////////////////////////////////////////
-    cout<<"segments valides des 2 obstacles réunis ("<<ob1.segValides.size()<<")"<<endl;
+    list<Segment>::iterator its = ob2.segValides_reste.begin();
+    for(; its!= ob2.segValides_reste.end(); its++) ob1.segValides_reste.push_back(*its);
+    its = ob2.segValides_contour.begin();
+    for(; its!= ob2.segValides_contour.end(); its++) ob1.segValides_contour.push_back(*its);
+    cout<<"Liste des segments valides des obstacles du graphe : "<<endl;
+    printSegValides(ob1.segValides_contour);
+    cout<<"Liste des segments valides entre les obstacles du graphe : "<<endl;
+    printSegValides(ob1.segValides_reste);    
+    cout<<"segments valides des 2 obstacles réunis ("<<ob1.segValides_contour.size()<<" et "<<ob1.segValides_reste.size()<<")"<<endl;
     for(int i=0; i< (int) ob1.Sommets.size(); i++){
         for(int j=0; j< (int) ob2.Sommets.size(); j++){
             cout<<"je fais le sommet : "<<ob1.Sommets[i]<<" avec le sommet : "<<ob2.Sommets[j]<<endl;
-            its=ob1.segValides.begin();
+            its=ob1.segValides_contour.begin();
             bool isValide = true; 
-            for(; its!= ob1.segValides.end(); its++){ //on parcout tous les segments de l'obstacle 1
+            for(; its!= ob1.segValides_contour.end(); its++){ //on parcout tous les segments de l'obstacle 1
                 //Obligé de vérif si le segment que l'on parcours n'a pas un de ces 2 sommets égales au sommet que l'on test
                 //pour créer un segment, sinon l'algo d'intersection va considérer que il y a une intersection parce que sommet commun
                 if(its->a==ob1.Sommets[i] || its->b==ob1.Sommets[i] || its->a==ob2.Sommets[j] || its->b==ob2.Sommets[j]) continue;
@@ -67,8 +83,8 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
             }
             if(!isValide) continue; // si le semgent est deja invalide, cela ne sert à rien de continuer la vérif
             // On fait la meme chose pour les semgents de l'obstacle 2
-            its=ob2.segValides.begin(); 
-            for(; its!= ob2.segValides.end(); its++){
+            its=ob2.segValides_contour.begin(); 
+            for(; its!= ob2.segValides_contour.end(); its++){
                 if(its->a==ob1.Sommets[i] || its->b==ob1.Sommets[i] || its->a==ob2.Sommets[j] || its->b==ob2.Sommets[j]) continue;
                 if(intersect(ob1.Sommets[i], ob2.Sommets[j], its->a, its->b)){
                     isValide = false;
@@ -77,7 +93,7 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
             }
             if(isValide){ // si le segment est toujorus valdie après les vérifications, on l'ajoute à la liste segValides
                 Segment newSeg = Segment(ob1.Sommets[i], ob2.Sommets[j]);
-                ob1.segValides.push_back(newSeg);
+                ob1.segValides_reste.push_back(newSeg);
                 cout<<"segment entre point "<<ob1.Sommets[i]<<" et "<<ob2.Sommets[j]<<" ajouté"<<endl;
             }
         }
@@ -85,6 +101,35 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     ob1.Sommets = pts;
     ob1.nbr_sommets = pts.size();
     return ob1;
+}
+
+list<Segment> deleteSegCommun(list<Segment> liste){
+    list<Segment>::iterator its = liste.begin();
+    list<Segment>::iterator its2 = liste.begin();
+    its2++;
+    list<Segment>::iterator memory;
+    while(its!= liste.end()){
+        bool isInvalide = false;
+        while(its2!= liste.end()){
+            if((its->a==its2->a || its->a==its2->b) && (its->b== its2->a || its->b==its2->b)){
+                list<Segment>::iterator mem = its2;
+                its2++;
+                cout<<"segment ("<< mem->a<<","<<mem->b<<") non valide"<<endl;
+                liste.erase(mem);
+                isInvalide = true;
+                memory = its;
+                continue;
+            }
+            else its2++;
+        }
+        if(isInvalide){ 
+            its++;
+            cout<<"segment ("<< memory->a<<","<<memory->b<<") non valide"<<endl;
+            liste.erase(memory);
+        }
+        else its++;
+    }
+    return liste;
 }
 
 ////////////////////////////////////////////////////////////
@@ -115,8 +160,8 @@ vector<vector<double> > buildMatrixC(Point * memory, Graphe g){
     memory[0] = g.depart;
     memory[nb-1] = g.fin;
     int cpt=1;
-    list<Segment>::iterator its = g.graphe_.begin();
-    for(; its!= g.graphe_.end(); its++){
+    list<Segment>::iterator its = g.graphe_All.begin();
+    for(; its!= g.graphe_All.end(); its++){
         int a = isIn(its->a, memory, nb);
         int b = isIn(its->b, memory, nb);
         if(b== -1){ 
@@ -143,7 +188,8 @@ void printMatricC(vector<vector<double> > c, Point * memory, int nb){
     cout<<endl;
     for(int i=0; i< (int) c.size(); i++){
         for(int j=0; j < (int) c[0].size(); j++){
-            cout<<c[i][j]<< " ";
+            if(c[i][j]>=2.14748e+09) cout<<"max"<<" ";
+            else cout<<c[i][j]<<" ";
         }
         cout<<endl;
     }
@@ -163,4 +209,13 @@ bool isIn(Point a, vector<Point> pts){
         if(a==pts[i])return true; 
     }
     return false;
+}
+
+void Graphe::concateListe(){
+    list<Segment> all;
+    list<Segment>::iterator its = graphe_Obst.begin();
+    for(; its!= graphe_Obst.end(); its++) all.push_back(*its);
+    its = graphe_Autre.begin();
+    for(; its!= graphe_Autre.end(); its++) all.push_back(*its);
+    this->graphe_All = all;
 }
