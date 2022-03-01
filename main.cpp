@@ -12,8 +12,6 @@ int main(){
     **/
     cout<<"=========== Initialisation Graphe ==========="<<endl;
     Obstacle ob1 = ConstructObstacle(exemple());
-    printSegValides(ob1.segValides_contour);
-    printSegValides(ob1.segValides_reste);
     list<Obstacle> Obstacles;
     Obstacles.push_back(ob1);
     Obstacle ob2 = ConstructObstacle(exemple2());
@@ -27,7 +25,7 @@ int main(){
     cout<<endl;
     cout<<"=========== Construction Graphe ==========="<<endl;
     Graphe g(Obstacles, depart, fin);
-    cout<<"graphe f contruit"<<endl;
+    cout<<"graphe g contruit"<<endl;
     printSegValides(g.graphe_All);
     Point memory[g.nb_sommets];
     cout<<endl;

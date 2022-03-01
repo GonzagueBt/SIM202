@@ -7,13 +7,21 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
     fin = y;
     list<Obstacle>::iterator its=obst.begin();
     Obstacle final= *its;
+    if(!isOutside(x, *its) || !isOutside(y, *its)){
+        cout<<"Point d'arrivée ou de départ à l'intérieur d'un obstacle, problème non résoluble"<<endl;
+        abort();
+    }
     cout<<"premier obstacle"<<endl;
     int cpt=1;
     if(obst.size()!=1){ 
         its++; //gestion cas un seul obstacle
         cout<<"début boucle "<<endl;
         for(; its!= obst.end(); its++){// on ajoute un par un les obstacles (on ajoute à la liste des segments les segments entre obstacles)
-            cout<<"ajout d'un obstacle :"<<cpt<<endl;
+            cout<<"ajout d'un obstacle : "<<cpt<<endl;
+            if(!isOutside(x, *its) || !isOutside(y, *its)){
+                cout<<"Point d'arrivée ou de départ à l'intérieur d'un obstacle, problème non résoluble"<<endl;
+                abort();
+            }
             final = sumObstacles(final, *its);
             cout<<"ajout obstacle réussi !"<<endl;
             cpt++;
@@ -219,3 +227,4 @@ void Graphe::concateListe(){
     for(; its!= graphe_Autre.end(); its++) all.push_back(*its);
     this->graphe_All = all;
 }
+
