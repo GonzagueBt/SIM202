@@ -142,13 +142,19 @@ void Obstacle::constructionSeg()
  
 } */
 
+void printSommet(vector<Point> sommet){
+    cout<<"Liste des sommets du graphe : "<<endl;
+    for(int i=0; i< (int)sommet.size(); i++){
+        cout<<"("<<sommet[i].x<<","<<sommet[i].y<<")  ";
+    }
+    cout<<endl;
+}
 
 Obstacle ConstructObstacle(vector<Point> V)
 {
     int n; n = V.size();
-    list<Segment> SegValides; 
     Obstacle Obs(V, n);
-    SegValides = Obs.constructionSeg();
+    Obs.constructionSeg();
     return Obs;
 }
 

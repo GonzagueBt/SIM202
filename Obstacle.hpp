@@ -16,12 +16,13 @@ public:
     bool concave_convexe(); // true = obstacle convexe, false = obstacle concave
     void constructionSeg(); // rempli une liste de segments valides
     Obstacle Padding(const int &r);
-    Point_et_Indice Trouver_Sommet_le_plus_proche(const Point &A);
+    //Point_et_Indice Trouver_Sommet_le_plus_proche(const Point &A);
     bool inte_exte(const Point & B);
 };
 
 // afficher des segments
 void printSegValides(list<Segment> liste);
+void printSommet(vector<Point> sommet)
 
 // Calcul des coordonnées (2 points) des deux extrélités de la normale d'un segment
 vector<Point> Coor_Sommets_Normale(const Point & S_1, const Point & S_2);
