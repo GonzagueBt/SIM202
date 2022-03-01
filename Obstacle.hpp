@@ -22,7 +22,7 @@ public:
 
 // afficher des segments
 void printSegValides(list<Segment> liste);
-void printSommet(vector<Point> sommet)
+void printSommet(vector<Point> sommet);
 
 // Calcul des coordonnées (2 points) des deux extrélités de la normale d'un segment
 vector<Point> Coor_Sommets_Normale(const Point & S_1, const Point & S_2);
