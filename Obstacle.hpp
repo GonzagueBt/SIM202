@@ -10,13 +10,14 @@ class Obstacle
 public:
     int nbr_sommets;                            
     vector<Point> Sommets;
-    list<Segment> segValides;
+    list<Segment> segValides_contour;
+    list<Segment> segValides_reste;
     Obstacle(vector<Point> P, int n = 0): nbr_sommets(n), Sommets(P) {}                                            
     bool concave_convexe(); // true = obstacle convexe, false = obstacle concave
-    list<Segment> constructionSeg(); // rempli une liste de segments valides
-   
-    // Obstacle Padding(const int &r);
-           
+    void constructionSeg(); // rempli une liste de segments valides
+    Obstacle Padding(const int &r);
+    Point_et_Indice Trouver_Sommet_le_plus_proche(const Point &A);
+    bool inte_exte(const Point & B);
 };
 
 // afficher des segments
