@@ -93,48 +93,47 @@ bool Obstacle::concave_convexe()
 }
 
 
-list<Segment> Obstacle::constructionSeg()
+void Obstacle::constructionSeg()
 {
     if (concave_convexe() == true) // on remplit la liste des segments valides en faisant le tour de l'obstacle
     {
         for(int i = 0; i < this->nbr_sommets -1; i++)
         {
             Segment var1(this->Sommets[i], this->Sommets[i+1]); 
-            segValides.push_back(var1);
+            segValides_contour.push_back(var1);
         }
         Segment var2(this->Sommets[this->nbr_sommets-1], this->Sommets[0]);
-        segValides.push_back(var2);
+        segValides_contour.push_back(var2);
     }
     else // on remplit la liste des segments valides en faisant le tour de l'obstacle et en considérant d'autres segmets valides dus à la concavité
     {
         for(int i = 0; i < this->nbr_sommets - 1; i++)
         {
             Segment var1(this->Sommets[i], this->Sommets[i+1]);
-            segValides.push_back(var1);
+            segValides_contour.push_back(var1);
         }
         Segment var2(this->Sommets[this->nbr_sommets-1], this->Sommets[0]);
-        segValides.push_back(var2);
+        segValides_contour.push_back(var2);
         for (int i = 0; i < this->nbr_sommets - 2; i++) 
         {
             if (transfo(this->Sommets[i], this->Sommets[i+1], this->Sommets[i+2]) == true)
             {
                 Segment var3(this->Sommets[i], this->Sommets[i+2]);
-                segValides.push_back(var3);
+                segValides_reste.push_back(var3);
             }
         }
         if (transfo(this->Sommets[this->nbr_sommets - 2], this->Sommets[this->nbr_sommets - 1], this->Sommets[0]) == true) 
             {
                 Segment var4(this->Sommets[this->nbr_sommets - 2], this->Sommets[0]);
-                segValides.push_back(var4);
+                segValides_reste.push_back(var4);
             }
         if (transfo(this->Sommets[this->nbr_sommets - 1], this->Sommets[0], this->Sommets[1]) == true)
             {
                 Segment var5(this->Sommets[this->nbr_sommets - 1], this->Sommets[1]);
-                segValides.push_back(var5);
+                segValides_reste.push_back(var5);
             }
         
     }
-    return segValides;
 }
 
 
