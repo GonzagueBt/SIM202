@@ -114,7 +114,7 @@ void Obstacle::constructionSeg()
                 if (IsIn(segValides_contour,arete) == true) continue;
                 auto it = this->segValides_contour.begin();
                 for(; it != this->segValides_contour.end(); it++){
-                    if(!intersect(arete, *it) || (arete.a== it->a || arete.a== it->b || arete.b== it->a || arete.b== it->b)){
+                    if( (intersect(arete, *it) && (arete.a== it->a || arete.a== it->b || arete.b== it->a || arete.b== it->b)) || !intersect(arete, *it)){
                         if(isOutside((this->Sommets[i]+this->Sommets[i+1])/2), *this){
                             this->segValides_reste.push_back(arete);
                         }
