@@ -3,7 +3,7 @@
 
 ostream&operator<<(ostream& os, const Arc &A)
 {
-os<<"Distance entre "<<A.a<<" et "<<A.b<<" : "<<A.poid;
+os<<"("<<A.a<<";"<<A.b<<")"<<endl;;
 return os;
 }
 
@@ -28,7 +28,7 @@ Point Intersction2Arcs(Arc A, Arc B){
     // segment B(x,y) a1x + b1y = c1
     double a2 = B.b.y - B.a.y;
     double b2 = B.a.x - B.b.x;
-    double c2 = a2*(B.a.x) - b2*(B.a.y);
+    double c2 = a2*(B.a.x) + b2*(B.a.y);
   
     double determinant = a1*b2 - a2*b1;
   

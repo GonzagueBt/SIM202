@@ -29,7 +29,8 @@ int isIn(Point a, Point *memory, int nb);
 bool isIn(Point a, vector<Point> pts);
 bool isIn(Segment A, list<Segment> segs);
 vector<vector<double> > initC(int nb);
-void deleteIntersectionSeg(list<Segment>& toDelete, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob);
-
+list<Segment> deleteIntersectionSeg(list<Segment>& toDelete, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob);
+list<Segment> gestion1cas(list<Segment>& toDelete, Point x, Point inter, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob);
+int sommetsNonUsed(vector<Point> pts, list<Segment> segs);
 
 #endif

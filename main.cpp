@@ -20,7 +20,7 @@ int main(){
     //Obstacles.push_back(ob3);
     cout<<"liste obstacle construite"<<endl;
     Point depart(0,0);
-    Point fin(2,5);
+    Point fin(2,3);
     cout<<"Point depart et fin construit"<<endl;
     cout<<endl;
     cout<<"=========== Construction Graphe ==========="<<endl;
@@ -63,18 +63,18 @@ vector<Point> exemple(){
 
 vector<Point> exemple2(){
     vector<Point> exemple;
-    exemple.push_back(Point(2,1));
-    exemple.push_back(Point(4,1));
-    exemple.push_back(Point(4,4));
-    exemple.push_back(Point(2,4));
+    exemple.push_back(Point(1.5,0));
+    exemple.push_back(Point(4,0));
+    exemple.push_back(Point(4,3));
+    exemple.push_back(Point(1.5,3));
     return exemple;
 }
 
 vector<Point> exemple3(){
     vector<Point> exemple;
-    exemple.push_back(Point(1,-2));
-    exemple.push_back(Point(5,-2));
-    exemple.push_back(Point(5,2));
-    exemple.push_back(Point(1,-2));
+    exemple.push_back(Point(-2,2));
+    exemple.push_back(Point(2,2));
+    //exemple.push_back(Point(2,4));
+    //exemple.push_back(Point(-2,4));
     return exemple;
 }

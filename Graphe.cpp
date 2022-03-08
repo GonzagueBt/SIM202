@@ -7,13 +7,13 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
     fin = y;
     list<Obstacle>::iterator its=obst.begin();
     Obstacle final= *its;
-    if(!isOutside(x, *its) || !isOutside(y, *its)){
+    if(obst.size()>0 && (!isOutside(x, *its) || !isOutside(y, *its))){
         cout<<"Point d'arrivée ou de départ à l'intérieur d'un obstacle, problème non résoluble"<<endl;
         abort();
     }
     cout<<"premier obstacle"<<endl;
     int cpt=1;
-    if(obst.size()!=1){ 
+    if(obst.size()>1){ 
         its++; //gestion cas un seul obstacle
         cout<<"début boucle "<<endl;
         for(; its!= obst.end(); its++){// on ajoute un par un les obstacles (on ajoute à la liste des segments les segments entre obstacles)
@@ -28,21 +28,15 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
         }
     }
     cout<<"obstacles tous assemblés"<<endl;
-    cout<<"Liste des segments valides des obstacles du graphe : "<<endl;
-    printSegValides(final.segValides_contour);
-    cout<<"Liste des segments valides entre les obstacles du graphe : "<<endl;
-    printSegValides(final.segValides_reste);
     vector<Point> dep;
     dep.push_back(x);
     Obstacle depart(dep, 1);
-    cout<<"Ajout point de départ"<<endl;
     final = sumObstacles(final, depart); //traitement des segments entre le point de départ et et les sommets du graphe
     cout<<"point de départ ajouté"<<endl;
     //depart.Sommets[0] = y;
     vector<Point> fin;
     fin.push_back(y);
     Obstacle end(fin, 1);
-    cout<<"ajout point de fin"<<endl;
     final = sumObstacles(final, end);  //traitement des segments entre le point de fin et et les sommets du graphe
     cout<<"point de fin ajouté"<<endl;
     printSommet(final.Sommets);
@@ -50,61 +44,43 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
     graphe_Obst = deleteSegCommun(final.segValides_contour);
     graphe_Autre = deleteSegCommun(final.segValides_reste);
     concateListe();
-    nb_sommets = final.nbr_sommets;
+    nb_sommets = final.nbr_sommets - sommetsNonUsed(final.Sommets, graphe_All);
 }
 
 Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
-    vector<Point> pts;
     Obstacle memory = ob1;
-    cout<<"intialisation liste de points"<<endl;
-    pts.reserve(ob1.nbr_sommets+ob2.nbr_sommets);
-    cout<<"nombre de sommets totale maximum : "<<ob1.nbr_sommets+ob2.nbr_sommets<<endl;
-    for(int i=0; i< (int) ob1.Sommets.size(); i++){
-        pts.push_back(ob1.Sommets[i]);
-    }
-    for(int i=0; i< (int) ob2.Sommets.size(); i++){
-        if(!isIn(ob2.Sommets[i], pts)) pts.push_back(ob2.Sommets[i]);
-    }
-    cout<<"nombre de sommets totale après suppression des doubles : "<<pts.size()<<endl;
-    cout<<"liste de points des 2 obstacles construites"<<endl;
     auto its = ob2.segValides_reste.begin();
     for(; its!= ob2.segValides_reste.end(); its++) ob1.segValides_reste.push_back(*its);
     its = ob2.segValides_contour.begin();
-    for(; its!= ob2.segValides_contour.end(); its++) ob1.segValides_contour.push_back(*its);
-    cout<<"Liste des segments valides des obstacles du graphe : "<<endl;
-    printSegValides(ob1.segValides_contour);
-    cout<<"Liste des segments valides entre les obstacles du graphe : "<<endl;
-    printSegValides(ob1.segValides_reste);    
+    for(; its!= ob2.segValides_contour.end(); its++) ob1.segValides_contour.push_back(*its);   
     cout<<"segments valides des 2 obstacles réunis ("<<ob1.segValides_contour.size()<<" et "<<ob1.segValides_reste.size()<<")"<<endl;
-    /*cout<<"vérifications d'obstacles chevauchés"<<endl;
+    cout<<"vérifications d'obstacles chevauchés"<<endl;
     auto it = ob1.segValides_contour.begin();
     auto it2 = ob1.segValides_contour.begin();
     it2++;
-    auto end = ob1.segValides_contour.end();
-    end--;
     list<Segment> toDelete;
-    for(; it!= end;it++){
+    for(; it!= ob1.segValides_contour.end();it++){
         for(; it2!= ob1.segValides_contour.end() ;it2++){
             if(it->a==it2->a || it->b==it2->a || it->a==it2->b || it->b==it2->b) continue;
             if(intersect(*it, *it2)){
-                cout<<*it<<endl;
-                cout<<*it2<<endl;
-                cout<<endl;
-                deleteIntersectionSeg(toDelete, *it, *it2, memory, ob2, ob1);
+                toDelete = deleteIntersectionSeg(toDelete, *it, *it2, memory, ob2, ob1);
             }
         }
+        it2 = ob1.segValides_contour.begin();
     }
-    it = toDelete.begin();
-    for(; it != toDelete.end(); it++){
-        ob1.deleteSegContour(*it);
-        ob2.deleteSegContour(*it);
-        memory.deleteSegContour(*it);
+    cout<<ob1.nbr_sommets<<endl;
+    printSommet(ob1.Sommets);
+    printSegValides(ob1.segValides_contour);
+    auto it3 = toDelete.begin();
+    for(; it3 != toDelete.end(); it3++){
+        cout<<"Suppression segment "<<it3->a<<"," <<it3->b<<endl;
+        ob1.deleteSegContour(*it3);
+        ob2.deleteSegContour(*it3);
+        memory.deleteSegContour(*it3);
     }
-    cout<<"je sors de ce truc"<<endl;
-    */
+
     for(int i=0; i< (int) ob1.Sommets.size(); i++){
         for(int j=0; j< (int) ob2.Sommets.size(); j++){
-            cout<<"je fais le sommet : "<<ob1.Sommets[i]<<" avec le sommet : "<<ob2.Sommets[j]<<endl;
             its=ob1.segValides_contour.begin();
             bool isValide = true; 
             for(; its!= ob1.segValides_contour.end(); its++){ //on parcout tous les segments de l'obstacle 1
@@ -126,6 +102,7 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
                     break;
                 } 
             }
+            if(!isOutside(ob1.Sommets[i], ob2) || !isOutside(ob2.Sommets[j], ob1)) isValide = false;
             if(isValide){ // si le segment est toujorus valdie après les vérifications, on l'ajoute à la liste segValides
                 Segment newSeg = Segment(ob1.Sommets[i], ob2.Sommets[j]);
                 ob1.segValides_reste.push_back(newSeg);
@@ -133,12 +110,22 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
             }
         }
     }
+    vector<Point> pts;
+    pts.reserve(ob1.nbr_sommets+ob2.nbr_sommets);
+    for(int i=0; i< (int) ob1.Sommets.size(); i++){
+        pts.push_back(ob1.Sommets[i]);
+    }
+    for(int i=0; i< (int) ob2.Sommets.size(); i++){
+        if(!isIn(ob2.Sommets[i], pts)) pts.push_back(ob2.Sommets[i]);
+    }
+    cout<<"nombre de sommets totale après suppression des doubles : "<<pts.size()<<endl;
     ob1.Sommets = pts;
     ob1.nbr_sommets = pts.size();
     return ob1;
 }
 
 list<Segment> deleteSegCommun(list<Segment> liste){
+    if(liste.size()==2) return liste;
     list<Segment>::iterator its = liste.begin();
     list<Segment>::iterator its2 = liste.begin();
     its2++;
@@ -191,7 +178,6 @@ vector<vector<double> > initC(int nb){
 vector<vector<double> > buildMatrixC(Point * memory, Graphe g){
     int nb = g.nb_sommets;
     vector<vector<double> > c = initC(nb);
-    //Point memory[nb];
     memory[0] = g.depart;
     memory[nb-1] = g.fin;
     int cpt=1;
@@ -255,28 +241,57 @@ void Graphe::concateListe(){
     this->graphe_All = all;
 }
 
-void deleteIntersectionSeg(list<Segment>& toDelete, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob){
+list<Segment> deleteIntersectionSeg(list<Segment>& toDelete, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob){
     Point inter = Intersction2Arcs(A,B);
-    if(A.a==inter || A.a==inter || A.b==inter || A.b==inter) return; // si l'intersection des segments et sur le somemt à tous les 2, tous les points sont segValides_reste
-    if(!isOutside(A.a, ob2) || !isOutside(A.a, ob1)){
-        Segment nouveau(A.b, inter);
-        ob.segValides_contour.push_back(nouveau);
-        toDelete.push_back(A);
+    if(A.a==inter || A.a==inter || A.b==inter || A.b==inter) return toDelete; // si l'intersection des segments et sur le somemt à tous les 2, tous les points sont segValides_reste
+    if(isIn(A.a, ob1.Sommets) &&  !isOutside(A.a, ob2) && !isIn(A, toDelete)){ 
+        toDelete = gestion1cas(toDelete, A.b, inter, B, A, ob2, ob1, ob);
     }
-    else if(!isOutside(A.b, ob2) || !isOutside(A.b, ob1)){
-        Segment nouveau(A.a, inter);
-        ob.segValides_contour.push_back(nouveau);
-        toDelete.push_back(A);
+    else if(isIn(A.b, ob1.Sommets) &&  !isOutside(A.b, ob2) && !isIn(A, toDelete)){
+        toDelete = gestion1cas(toDelete, A.a, inter, B, A, ob2, ob1, ob);
     }
-    if(!isOutside(B.a, ob2) || !isOutside(B.a, ob1)){
-        Segment nouveau(B.b, inter);
-        ob.segValides_contour.push_back(nouveau);
-        toDelete.push_back(B);
+    else if(isIn(B.a, ob1.Sommets) &&  !isOutside(B.a, ob2) && !isIn(B, toDelete)){
+        toDelete = gestion1cas(toDelete, B.b, inter, A, B, ob1, ob2, ob);
     }
-    else if(!isOutside(B.b, ob2) || !isOutside(B.b, ob1)){
-        Segment nouveau(B.a, inter);
-        ob.segValides_contour.push_back(nouveau);
-        toDelete.push_back(B);
+    else if(isIn(B.b, ob1.Sommets) &&  !isOutside(B.b, ob2) && !isIn(B, toDelete)){
+        toDelete = gestion1cas(toDelete, B.a, inter, A, B, ob1, ob2, ob);
     }
+    return toDelete;
 }
 
+
+list<Segment> gestion1cas(list<Segment>& toDelete, Point x, Point inter, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob){
+    Segment nouveau(x, inter);
+    ob.segValides_contour.push_back(nouveau);
+    Segment test(A.a, inter);
+    auto it = ob2.segValides_contour.begin();
+    bool mem = true;
+    for(; it != ob2.segValides_contour.end() ; it++) if(intersect(*it, test)) mem = false; 
+    if( mem && isOutside(A.a, ob1)){ ob.segValides_contour.push_back(test); cout<<"ajout du seg en 1"<<test<<endl;}
+    test = Segment(A.b,inter);
+    it = ob2.segValides_contour.begin();
+    mem = true;
+    for(; it != ob2.segValides_contour.end() ; it++) if(intersect(*it, test)) mem = false; 
+    if( mem && isOutside(A.b, ob1)){ ob.segValides_contour.push_back(test); cout<<"ajout du seg en 2"<<test<<endl;}
+    toDelete.push_back(B);
+    ob.Sommets.push_back(inter);
+    ob.nbr_sommets += 1;
+    return toDelete;
+}
+
+
+int sommetsNonUsed(vector<Point> pts, list<Segment> segs){
+    int cpt=0;
+    for(int i=0; i< (int) pts.size(); i++){
+        auto it= segs.begin();
+        bool isUsed = false;
+        for(; it!= segs.end(); it++){
+            if(it->a==pts[i] || it->b==pts[i]){
+                isUsed=true;
+                break;
+            }
+        }
+        if(!isUsed) cpt++;
+    }
+    return cpt;
+}

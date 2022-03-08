@@ -122,7 +122,6 @@ void Obstacle::constructionSeg()
                 if(memory){
                     Point x = (this->Sommets[i]+this->Sommets[j])/2;
                     if(isOutside(x, *this) && !isIn(arete, this->segValides_reste)){
-                        cout<<"ajout du segment : "<<arete<<endl;
                         this->segValides_reste.push_back(arete);
                     }
                 }
@@ -159,6 +158,7 @@ bool ccw(const Point &A, const Point &B, const Point &C){
 
 
 bool intersect(const Point &A, const Point &B, const Point &C, const Point &D){
+    if(A==C || A==D || B==C || B==D) return false;
     return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D);
 }
 
@@ -179,6 +179,19 @@ bool isOutside(Point x, Obstacle ob){
         }
     }
     if(cpt%2 == 0) return true;
+    else{
+        //on refait une deuxieme fois le test avec une demi-droite horizontal pour gérer d'éventuel erreur quand x se trouve sur 
+        // un coté de l'obstacle
+        Point y(INT_MAX, x.y);
+        cpt = 0;
+        list<Segment>::iterator its = ob.segValides_contour.begin();
+        for(; its!= ob.segValides_contour.end(); its++){
+            if(intersect(its->a, its->b, x, y)){
+                cpt++;
+            }
+        }
+        if(cpt%2 == 0) return true;
+    }
    return false;
 }
 
