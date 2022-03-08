@@ -106,26 +106,16 @@ void Obstacle::constructionSeg()
         }
         Segment var2(this->Sommets[this->nbr_sommets-1], this->Sommets[0]);
         segValides_contour.push_back(var2);
-        for (int i = 0; i < this->nbr_sommets - 2; i++) 
+        for(int i = 0; i < this->nbr_sommets; i++)
         {
-            if (transfo(this->Sommets[i], this->Sommets[i+1], this->Sommets[i+2]) == true)
+            for(int j = i + 1; j < this->nbr_sommets; j++)
             {
-                Segment var3(this->Sommets[i], this->Sommets[i+2]);
-                segValides_reste.push_back(var3);
-            }
+                Segment arete(this->Sommets[i],this->Sommets[j]);
+                if (IsIn(segValides_contour,arete) == true)
+                    break;
+                else
+                }
         }
-        if (transfo(this->Sommets[this->nbr_sommets - 2], this->Sommets[this->nbr_sommets - 1], this->Sommets[0]) == true) 
-            {
-                Segment var4(this->Sommets[this->nbr_sommets - 2], this->Sommets[0]);
-                segValides_reste.push_back(var4);
-            }
-        if (transfo(this->Sommets[this->nbr_sommets - 1], this->Sommets[0], this->Sommets[1]) == true)
-            {
-                Segment var5(this->Sommets[this->nbr_sommets - 1], this->Sommets[1]);
-                segValides_reste.push_back(var5);
-            }
-        
-    }
 }
 
 
