@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-Wall -Wextra -g
+CXXFLAGS=-Wall -Wextra -g -std=c++11
 LDFLAGS=
 EXEC=main
 SRC=$(wildcard *.cpp)

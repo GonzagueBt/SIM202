@@ -115,7 +115,7 @@ void Obstacle::constructionSeg()
                 auto it = this->segValides_contour.begin();
                 bool memory = true;
                 for(; it != this->segValides_contour.end(); it++){
-                    if((intersect(arete, *it) && (arete.a== it->a || arete.a== it->b || arete.b== it->a || arete.b== it->b)) || intersect(arete, *it)){
+                    if((intersect(arete, *it) && (arete.a!= it->a && arete.a!= it->b && arete.b!= it->a && arete.b!= it->b))){
                         memory = false;
                     }
                 }
