@@ -1,5 +1,6 @@
 #include "Point.hpp"
 #include <cmath>
+#include <list>
 #include <iostream>
 #ifndef Arc_H
 #define Arc_H
@@ -23,4 +24,5 @@ class Segment : public Arc{
 }; 
 
 Point Intersction2Arcs(Arc A, Arc B);
+bool isIn(Segment A, list<Segment> segs);
 #endif

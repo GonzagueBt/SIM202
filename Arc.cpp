@@ -37,3 +37,11 @@ Point Intersction2Arcs(Arc A, Arc B){
     double y = (a1*c2 - a2*c1)/determinant;
     return Point(x,y);
 }
+
+bool isIn(Segment A, list<Segment> segs){
+    auto it = segs.begin();
+    for(; it!=segs.end(); it++){
+        if(A ==(*it))return true; 
+    }
+    return false;
+}

@@ -55,6 +55,7 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
 
 Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     vector<Point> pts;
+    Obstacle memory = ob1;
     cout<<"intialisation liste de points"<<endl;
     pts.reserve(ob1.nbr_sommets+ob2.nbr_sommets);
     cout<<"nombre de sommets totale maximum : "<<ob1.nbr_sommets+ob2.nbr_sommets<<endl;
@@ -75,20 +76,32 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     cout<<"Liste des segments valides entre les obstacles du graphe : "<<endl;
     printSegValides(ob1.segValides_reste);    
     cout<<"segments valides des 2 obstacles réunis ("<<ob1.segValides_contour.size()<<" et "<<ob1.segValides_reste.size()<<")"<<endl;
-    cout<<"vérifications d'obstacles chevauchés"<<endl;
-    /*auto it = ob1.segValides_contour.begin();
+    /*cout<<"vérifications d'obstacles chevauchés"<<endl;
+    auto it = ob1.segValides_contour.begin();
     auto it2 = ob1.segValides_contour.begin();
     it2++;
-    for(; it!= ob1.segValides_contour.end();it++){
-        for(; it!= ob1.segValides_contour.end() ;it++){
+    auto end = ob1.segValides_contour.end();
+    end--;
+    list<Segment> toDelete;
+    for(; it!= end;it++){
+        for(; it2!= ob1.segValides_contour.end() ;it2++){
+            if(it->a==it2->a || it->b==it2->a || it->a==it2->b || it->b==it2->b) continue;
             if(intersect(*it, *it2)){
-                deleteIntersectionSeg(*it, *it2, ob1, ob2);
+                cout<<*it<<endl;
+                cout<<*it2<<endl;
+                cout<<endl;
+                deleteIntersectionSeg(toDelete, *it, *it2, memory, ob2, ob1);
             }
         }
-    }*/
-
-
-
+    }
+    it = toDelete.begin();
+    for(; it != toDelete.end(); it++){
+        ob1.deleteSegContour(*it);
+        ob2.deleteSegContour(*it);
+        memory.deleteSegContour(*it);
+    }
+    cout<<"je sors de ce truc"<<endl;
+    */
     for(int i=0; i< (int) ob1.Sommets.size(); i++){
         for(int j=0; j< (int) ob2.Sommets.size(); j++){
             cout<<"je fais le sommet : "<<ob1.Sommets[i]<<" avec le sommet : "<<ob2.Sommets[j]<<endl;
@@ -233,14 +246,6 @@ bool isIn(Point a, vector<Point> pts){
     return false;
 }
 
-bool isIn(Segment A, list<Segment> segs){
-    auto it = segs.begin();
-    for(; it!=segs.end(); it++){
-        if(A ==(*it))return true; 
-    }
-    return false;
-}
-
 void Graphe::concateListe(){
     list<Segment> all;
     list<Segment>::iterator its = graphe_Obst.begin();
@@ -250,19 +255,28 @@ void Graphe::concateListe(){
     this->graphe_All = all;
 }
 
-void deleteIntersectionSeg(Segment A, Segment B, Obstacle& ob1, Obstacle& ob2){
+void deleteIntersectionSeg(list<Segment>& toDelete, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob){
     Point inter = Intersction2Arcs(A,B);
-    if(A.a==B.a || A.a==B.b || A.b==B.a || A.b==B.b) return; // si l'intersection des segments et sur le somemt à tous les 2, tous les points sont segValides_reste
-    if(isIn(A, ob2.segValides_contour)){
-        if(!isOutside(A.a, ob2)){
-            
-        }
-        if(!isOutside(A.b, ob2)){
-
-        }
+    if(A.a==inter || A.a==inter || A.b==inter || A.b==inter) return; // si l'intersection des segments et sur le somemt à tous les 2, tous les points sont segValides_reste
+    if(!isOutside(A.a, ob2) || !isOutside(A.a, ob1)){
+        Segment nouveau(A.b, inter);
+        ob.segValides_contour.push_back(nouveau);
+        toDelete.push_back(A);
     }
-    else if(isIn(A, ob1.segValides_contour)){}
-    if(isIn(B, ob1.segValides_contour)){}
-    else if(isIn(B, ob2.segValides_contour)){}
+    else if(!isOutside(A.b, ob2) || !isOutside(A.b, ob1)){
+        Segment nouveau(A.a, inter);
+        ob.segValides_contour.push_back(nouveau);
+        toDelete.push_back(A);
+    }
+    if(!isOutside(B.a, ob2) || !isOutside(B.a, ob1)){
+        Segment nouveau(B.b, inter);
+        ob.segValides_contour.push_back(nouveau);
+        toDelete.push_back(B);
+    }
+    else if(!isOutside(B.b, ob2) || !isOutside(B.b, ob1)){
+        Segment nouveau(B.a, inter);
+        ob.segValides_contour.push_back(nouveau);
+        toDelete.push_back(B);
+    }
 }
 

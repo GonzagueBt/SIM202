@@ -1,7 +1,6 @@
 #ifndef Obstacle_H
 #define Obstacle_H
 #include "Arc.hpp" 
-#include <list>
 #include <vector>
 
 
@@ -19,7 +18,6 @@ public:
     //Point_et_Indice Trouver_Sommet_le_plus_proche(const Point &A);
     bool inte_exte(const Point & B);
     void deleteSegContour(Segment seg);
-}
 };
 
 // afficher des segments

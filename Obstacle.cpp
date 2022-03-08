@@ -111,16 +111,20 @@ void Obstacle::constructionSeg()
             for(int j = i + 1; j < this->nbr_sommets; j++)
             {
                 Segment arete(this->Sommets[i],this->Sommets[j]);
-                if (IsIn(segValides_contour,arete) == true) continue;
+                if(isIn(arete, segValides_contour)) continue;
                 auto it = this->segValides_contour.begin();
                 for(; it != this->segValides_contour.end(); it++){
                     if( (intersect(arete, *it) && (arete.a== it->a || arete.a== it->b || arete.b== it->a || arete.b== it->b)) || !intersect(arete, *it)){
-                        if(isOutside((this->Sommets[i]+this->Sommets[i+1])/2), *this){
+                        Point x = (this->Sommets[i]+this->Sommets[i+1])/2;
+                        if(isOutside(x, *this) && !isIn(arete, this->segValides_reste)){
+                            cout<<"ajout du segment : "<<arete<<endl;
                             this->segValides_reste.push_back(arete);
                         }
                     }
                 }
+            }
         }
+    }
 }
 
 
