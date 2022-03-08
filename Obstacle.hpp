@@ -18,6 +18,8 @@ public:
     Obstacle Padding(const int &r);
     //Point_et_Indice Trouver_Sommet_le_plus_proche(const Point &A);
     bool inte_exte(const Point & B);
+    void deleteSegContour(Segment seg);
+}
 };
 
 // afficher des segments

@@ -106,14 +106,19 @@ void Obstacle::constructionSeg()
         }
         Segment var2(this->Sommets[this->nbr_sommets-1], this->Sommets[0]);
         segValides_contour.push_back(var2);
-        for(int i = 0; i < this->nbr_sommets; i++)
+        for(int i = 0; i < this->nbr_sommets-1; i++)
         {
             for(int j = i + 1; j < this->nbr_sommets; j++)
             {
                 Segment arete(this->Sommets[i],this->Sommets[j]);
-                if (IsIn(segValides_contour,arete) == true)
-                    break;
-                else
+                if (IsIn(segValides_contour,arete) == true) continue;
+                auto it = this->segValides_contour.begin();
+                for(; it != this->segValides_contour.end(); it++){
+                    if(!intersect(arete, *it) || (arete.a== it->a || arete.a== it->b || arete.b== it->a || arete.b== it->b)){
+                        if(isOutside((this->Sommets[i]+this->Sommets[i+1])/2), *this){
+                            this->segValides_reste.push_back(arete);
+                        }
+                    }
                 }
         }
 }
@@ -169,4 +174,13 @@ bool isOutside(Point x, Obstacle ob){
    return false;
 }
 
+void Obstacle::deleteSegContour(Segment seg){
+    auto it = segValides_contour.begin();
+    for(; it!= segValides_contour.end(); it++){
+        if(*it==seg){
+            segValides_contour.erase(it);
+            return;
+        }
+    }
+}
 
