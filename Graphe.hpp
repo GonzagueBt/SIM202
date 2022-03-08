@@ -27,6 +27,9 @@ vector<vector<double> > buildMatrixC(Point * memory, Graphe g);
 void printMatricC(vector<vector<double> > c, Point * memory, int nb);
 int isIn(Point a, Point *memory, int nb);
 bool isIn(Point a, vector<Point> pts);
+bool isIn(Segment A, list<Segment> segs);
 vector<vector<double> > initC(int nb);
+void deleteIntersectionSeg(Segment A, Segment B, Obstacle& ob1, Obstacle& ob2);
+
 
 #endif

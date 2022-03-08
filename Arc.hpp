@@ -19,7 +19,8 @@ ostream & operator <<(ostream& os, const Arc &A);
 class Segment : public Arc{
     public:
         Segment(Point x, Point y);
+        bool operator==(const Segment);
 }; 
 
-
+Point Intersction2Arcs(Arc A, Arc B);
 #endif

@@ -40,14 +40,7 @@ vector<Point> Coor_Sommets_Normale(const Point & S_1, const Point & S_2)
 }
 
 
-bool ccw(const Point &A, const Point &B, const Point &C){
-    return ((C.y-A.y) * (B.x-A.x)) > ((B.y-A.y) * (C.x-A.x));
-}
 
-
-bool intersect(const Point &A, const Point &B, const Point &C, const Point &D){
-    return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D);
-}
 
 
 
@@ -157,6 +150,19 @@ Obstacle ConstructObstacle(vector<Point> V)
     return Obs;
 }
 
+bool ccw(const Point &A, const Point &B, const Point &C){
+    return ((C.y-A.y) * (B.x-A.x)) > ((B.y-A.y) * (C.x-A.x));
+}
+
+
+bool intersect(const Point &A, const Point &B, const Point &C, const Point &D){
+    return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D);
+}
+
+bool intersect(const Segment A, const Segment B){
+    return intersect(A.a, A.b, B.a, B.b);
+}
+
 
 //renvoie true si le point x est à l'extérieur OU sur un coté de l'obstacle
 //renvoie false si le point est à l'intérieur strictement du polygone
@@ -170,5 +176,7 @@ bool isOutside(Point x, Obstacle ob){
         }
     }
     if(cpt%2 == 0) return true;
-    return false;
+   return false;
 }
+
+

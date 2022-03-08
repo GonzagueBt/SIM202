@@ -85,27 +85,6 @@ void printCheminFinale(list<Point> chemin){
     cout<<endl;
 }
 
-/**int main(){
-    vector<vector<double> > c= exempleEnonce();
-    int N=5;
-    double l[N];
-    double p[N];
-    Dijsktra(N, c, l, p);
-
-    cout<<"l={";
-    for(int i=0; i<N; i++){
-        cout<<l[i]<<" ";
-    }
-    cout<<"}"<<endl;
-    cout<<"p={";
-    for(int i=0; i<N; i++){
-        cout<<p[i]<<" ";
-    }
-    cout<<"}"<<endl;
-
-    return 0;
-}**/
-
 /**vector<vector<double> > initC(int nb){
     vector<vector<double> > c;
     vector<double> ligne(nb);
