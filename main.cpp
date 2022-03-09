@@ -2,14 +2,6 @@
 #include "main.hpp"
 
 int main(){
-    /**vector<Point> exemple;
-    exemple.push_back(Point(2,0));
-    exemple.push_back(Point(5,0));
-    exemple.push_back(Point(5,3));
-    exemple.push_back(Point(2,3));
-    Obstacle ob1 = ConstructObstacle(exemple);
-    printSegValides(ob1.segValides);
-    **/
     cout<<"=========== Initialisation Graphe ==========="<<endl;
     Obstacle ob1 = ConstructObstacle(exemple());
     list<Obstacle> Obstacles;
@@ -26,7 +18,7 @@ int main(){
     cout<<"=========== Construction Graphe ==========="<<endl;
     Graphe g(Obstacles, depart, fin);
     cout<<"graphe g contruit"<<endl;
-    printSegValides(g.graphe_All);
+    printSegments(g.graphe_All);
     Point memory[g.nb_sommets];
     cout<<endl;
     cout<<"=========== Construction Matrice c ==========="<<endl;
@@ -38,7 +30,7 @@ int main(){
     double p[g.nb_sommets];
     Dijsktra(g.nb_sommets, c, l, p);
     list<Point> chemin = cheminFinale(memory, p, g.nb_sommets);
-    printCheminFinale(chemin);
+    printPoints(chemin);
     cout<<endl;
     cout<<"=========== Construction fichier graphe.txt ==========="<<endl;
     parserGraphe(g,chemin);

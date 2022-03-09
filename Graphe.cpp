@@ -70,7 +70,7 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     }
     cout<<ob1.nbr_sommets<<endl;
     printSommet(ob1.Sommets);
-    printSegValides(ob1.segValides_contour);
+    printSegments(ob1.segValides_contour);
     auto it3 = toDelete.begin();
     for(; it3 != toDelete.end(); it3++){
         cout<<"Suppression segment "<<it3->a<<"," <<it3->b<<endl;
@@ -124,113 +124,6 @@ Obstacle sumObstacles(Obstacle ob1, Obstacle ob2){
     return ob1;
 }
 
-list<Segment> deleteSegCommun(list<Segment> liste){
-    if(liste.size()==2) return liste;
-    list<Segment>::iterator its = liste.begin();
-    list<Segment>::iterator its2 = liste.begin();
-    its2++;
-    list<Segment>::iterator memory;
-    while(its!= liste.end()){
-        bool isInvalide = false;
-        while(its2!= liste.end()){
-            if((its->a==its2->a || its->a==its2->b) && (its->b== its2->a || its->b==its2->b)){
-                list<Segment>::iterator mem = its2;
-                its2++;
-                cout<<"segment ("<< mem->a<<","<<mem->b<<") non valide"<<endl;
-                liste.erase(mem);
-                isInvalide = true;
-                memory = its;
-                continue;
-            }
-            else its2++;
-        }
-        if(isInvalide){ 
-            its++;
-            cout<<"segment ("<< memory->a<<","<<memory->b<<") non valide"<<endl;
-            liste.erase(memory);
-        }
-        else its++;
-    }
-    return liste;
-}
-
-////////////////////////////////////////////////////////////
-
-
-vector<vector<double> > initC(int nb){
-    vector<vector<double> > c;
-    vector<double> ligne(nb);
-    for(int i=0; i<nb; i++){
-        c.push_back(ligne);
-    }
-    //intitalisation de c
-    for(int i=0; i<nb; i++){
-        for(int j=0; j<nb; j++){
-            if(i==j) c[i][j]=0;
-            else c[i][j] = max;
-        }
-    }
-    return c;
-}
-
-
-//Construction de la matrice
-vector<vector<double> > buildMatrixC(Point * memory, Graphe g){
-    int nb = g.nb_sommets;
-    vector<vector<double> > c = initC(nb);
-    memory[0] = g.depart;
-    memory[nb-1] = g.fin;
-    int cpt=1;
-    list<Segment>::iterator its = g.graphe_All.begin();
-    for(; its!= g.graphe_All.end(); its++){
-        int a = isIn(its->a, memory, nb);
-        int b = isIn(its->b, memory, nb);
-        if(b== -1){ 
-            memory[cpt] = its->b;
-            b = cpt;
-            cpt++;
-        }
-        if(a== -1){
-            memory[cpt] = its->a;
-            a = cpt;
-            cpt++;
-        }
-        c[a][b] = its->poid;
-        c[b][a] = its->poid;
-    }
-    return c;
-}
-
-void printMatricC(vector<vector<double> > c, Point * memory, int nb){
-    cout<<"Matrice C : "<<endl;
-    for(int i=0; i<nb; i++){
-        cout<<memory[i]<<" ";
-    }
-    cout<<endl;
-    for(int i=0; i< (int) c.size(); i++){
-        for(int j=0; j < (int) c[0].size(); j++){
-            if(c[i][j]>=2.14748e+09) cout<<"max"<<" ";
-            else cout<<c[i][j]<<" ";
-        }
-        cout<<endl;
-    }
-}
-
-// renvoie l'index du point a dans la liste memory. Retourne -1 a n'est pas dans la liste
-int isIn(Point a, Point * memory, int nb){
-    for(int i=0; i<nb; i++){
-        if(a==memory[i]) return i;
-    }
-    return -1;
-}
-
-//renvoie true si le point a est dans le vecteur de Point pts. Retourne false sinon
-bool isIn(Point a, vector<Point> pts){
-    for(int i=0; i< (int) pts.size(); i++){
-        if(a==pts[i])return true; 
-    }
-    return false;
-}
 
 void Graphe::concateListe(){
     list<Segment> all;
@@ -260,6 +153,7 @@ list<Segment> deleteIntersectionSeg(list<Segment>& toDelete, Segment A, Segment 
 }
 
 
+
 list<Segment> gestion1cas(list<Segment>& toDelete, Point x, Point inter, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob){
     Segment nouveau(x, inter);
     ob.segValides_contour.push_back(nouveau);
@@ -280,18 +174,3 @@ list<Segment> gestion1cas(list<Segment>& toDelete, Point x, Point inter, Segment
 }
 
 
-int sommetsNonUsed(vector<Point> pts, list<Segment> segs){
-    int cpt=0;
-    for(int i=0; i< (int) pts.size(); i++){
-        auto it= segs.begin();
-        bool isUsed = false;
-        for(; it!= segs.end(); it++){
-            if(it->a==pts[i] || it->b==pts[i]){
-                isUsed=true;
-                break;
-            }
-        }
-        if(!isUsed) cpt++;
-    }
-    return cpt;
-}

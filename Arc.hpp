@@ -1,6 +1,5 @@
 #include "Point.hpp"
 #include <cmath>
-#include <list>
 #include <iostream>
 #ifndef Arc_H
 #define Arc_H
@@ -14,7 +13,7 @@ class Arc{
         Arc(Point x=0, Point y=0, double z=0): a(x), b(y), poid(z){} 
 };
 
-// Fonctions externes 
+// Surcharges Opérateurs 
 ostream & operator <<(ostream& os, const Arc &A);
 
 class Segment : public Arc{
@@ -23,6 +22,36 @@ class Segment : public Arc{
         bool operator==(const Segment);
 }; 
 
+/**
+ * @brief Calcule le point d'intersection de 2 arcs/segments
+ * @attention l'Utilsation de cette fonction suppose que les 2 arcs se croisent
+ * @return Point : le point d'intersection de A et B
+ */
 Point Intersction2Arcs(Arc A, Arc B);
+
+/**
+ * @brief Vérifie si un segment est présent dans une liste de segments
+ * @return true si le segment A est dans la liste segs
+ * @return false sinon
+ */
 bool isIn(Segment A, list<Segment> segs);
+
+
+/**
+ * @brief Supprime tous les segments présents plusieurs fois dans une liste
+ * @return list<Segment> 
+ */
+list<Segment> deleteSegCommun(list<Segment>  liste);
+
+/**
+ * @brief Compte le nombre de points d'un vector de points non utilisés dans une liste de segments
+ */
+int sommetsNonUsed(vector<Point> pts, list<Segment> segs);
+
+/**
+ * @brief Print une liste de Segment
+ */
+void printSegments(list<Segment> liste);
+
+
 #endif

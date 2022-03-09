@@ -16,21 +16,12 @@ class Graphe{
         list<Segment> graphe_All;
         int nb_sommets;
         Graphe(list<Obstacle> obstacles, Point x, Point y);
-        void concateListe();
+        void concateListe(); //concatenation de graphe_Obst et graphe_Autre dans graphe_All
 };
 
 
 Obstacle sumObstacles(Obstacle ob1, Obstacle ob2);
-list<Segment> deleteSegCommun(list<Segment>  liste);
-Point * concatenateListe(int nb1, int nb2, Point * liste1, Point * liste2);
-vector<vector<double> > buildMatrixC(Point * memory, Graphe g);
-void printMatricC(vector<vector<double> > c, Point * memory, int nb);
-int isIn(Point a, Point *memory, int nb);
-bool isIn(Point a, vector<Point> pts);
-bool isIn(Segment A, list<Segment> segs);
-vector<vector<double> > initC(int nb);
 list<Segment> deleteIntersectionSeg(list<Segment>& toDelete, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob);
 list<Segment> gestion1cas(list<Segment>& toDelete, Point x, Point inter, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob);
-int sommetsNonUsed(vector<Point> pts, list<Segment> segs);
 
 #endif

@@ -31,3 +31,33 @@ Point operator|(const Point &u, const Point &v)
     res.y = v.y - u.y;
     return res;
 }
+
+int isIn(Point a, Point * memory, int nb){
+    for(int i=0; i<nb; i++){
+        if(a==memory[i]) return i;
+    }
+    return -1;
+}
+
+bool isIn(Point a, vector<Point> pts){
+    for(int i=0; i< (int) pts.size(); i++){
+        if(a==pts[i])return true; 
+    }
+    return false;
+}
+
+void printPoints(list<Point> chemin){
+    list<Point>::iterator its = chemin.begin();
+    for(; its!= chemin.end(); its++){
+        cout<<"("<<its->x<<","<<its->y<<") ";
+    }
+    cout<<endl;
+}
+
+void printSommet(vector<Point> sommet){
+    cout<<"Liste des sommets du graphe : "<<endl;
+    for(int i=0; i< (int)sommet.size(); i++){
+        cout<<"("<<sommet[i].x<<","<<sommet[i].y<<")  ";
+    }
+    cout<<endl;
+}
