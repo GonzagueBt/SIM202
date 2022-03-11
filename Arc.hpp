@@ -30,6 +30,13 @@ class Segment : public Arc{
 Point Intersction2Arcs(Arc A, Arc B);
 
 /**
+ * @brief Fait la concatenation de deux listes 
+ * @param deleteDuplicate si true, la fonction supprime les segments en doublon, si false, elle les garde tous.
+ * @return la une nouvelle liste de segments
+ */
+list<Segment> concateListe(list<Segment> list1, list<Segment> list2,bool deleteDuplicate);
+
+/**
  * @brief Vérifie si un segment est présent dans une liste de segments
  * @return true si le segment A est dans la liste segs
  * @return false sinon

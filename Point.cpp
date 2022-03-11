@@ -32,6 +32,18 @@ Point operator|(const Point &u, const Point &v)
     return res;
 }
 
+vector<Point> concateVectorPoints(vector<Point> a, vector<Point> b){
+    vector<Point> pts;
+    pts.reserve(a.size()+b.size());
+    for(int i=0; i< (int) a.size(); i++){
+        pts.push_back(a[i]);
+    }
+    for(int i=0; i< (int) b.size(); i++){
+        if(!isIn(b[i], pts)) pts.push_back(b[i]);
+    }
+    return pts;
+}
+
 int isIn(Point a, Point * memory, int nb){
     for(int i=0; i<nb; i++){
         if(a==memory[i]) return i;

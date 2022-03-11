@@ -55,7 +55,7 @@ void Obstacle::constructionSeg(){
     }
 }
 
-void Obstacle::deleteSegContour(Segment seg){
+void Obstacle::deleteSegFromList(Segment seg){
     auto it = segValides_contour.begin();
     for(; it!= segValides_contour.end(); it++){
         if(*it==seg){
@@ -102,8 +102,7 @@ bool transfo(const Point & a, const Point & b, const Point & c){
 }
 
 
-//renvoie true si le point x est à l'extérieur OU sur un coté de l'obstacle
-//renvoie false si le point est à l'intérieur strictement du polygone
+
 bool isOutside(Point x, Obstacle ob){
     Point y(x.x, INT_MAX);
     int cpt = 0;
@@ -115,6 +114,7 @@ bool isOutside(Point x, Obstacle ob){
     }
     if(cpt%2 == 0) return true;
     else{
+        //Could Be Better
         //on refait une deuxieme fois le test avec une demi-droite horizontal pour gérer d'éventuel erreur quand x se trouve sur 
         // un coté de l'obstacle
         Point y(INT_MAX, x.y);
@@ -131,11 +131,19 @@ bool isOutside(Point x, Obstacle ob){
 }
 
 
-//////////////////////////////// INTERSECTION DE 2 POINTS //////////////////////////////////
-bool ccw(const Point &A, const Point &B, const Point &C){ return ((C.y-A.y) * (B.x-A.x)) > ((B.y-A.y) * (C.x-A.x));}
+//////////////////////////////////////////|--------------------------|///////////////////////////////////////////
+//////////////////////////////////////////| Intersection de 2 Points |///////////////////////////////////////////
+//////////////////////////////////////////|--------------------------|///////////////////////////////////////////
+
+bool ccw(const Point &A, const Point &B, const Point &C){ 
+    return ((C.y-A.y) * (B.x-A.x)) > ((B.y-A.y) * (C.x-A.x));
+}
+
 bool intersect(const Point &A, const Point &B, const Point &C, const Point &D){
     if(A==C || A==D || B==C || B==D) return false;
-    return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D);}
+    return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D);
+}
+
 bool intersect(const Segment A, const Segment B){ return intersect(A.a, A.b, B.a, B.b);}
 
 

@@ -29,6 +29,13 @@ bool operator<(const Point&, const Point&);
 ostream & operator <<(ostream &, const Point &);
 Point operator | (const Point &u, const Point &v); 
 
+
+/**
+ * @brief Fait la concatenation de 2 vector de points en supprimant les doublons
+ * @return vector<Point> 
+ */
+vector<Point> concateVectorPoints(vector<Point> a, vector<Point> b);
+
 /**
  * @brief Vérifie si un point appartient à un tableau de points
  * @param a : le point que l'on vérifie

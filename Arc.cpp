@@ -37,6 +37,17 @@ Point Intersction2Arcs(Arc A, Arc B){
     return Point(x,y);
 }
 
+list<Segment> concateListe(list<Segment> list1, list<Segment> list2, bool deleteDuplicate){
+    list<Segment> all;
+    list<Segment>::iterator its = list1.begin();
+    for(; its!= list1.end(); its++) all.push_back(*its);
+    its = list2.begin();
+    for(; its!= list2.end(); its++){
+        if(!isIn(*its, all) && deleteDuplicate) all.push_back(*its);
+    }
+    return all;
+}
+
 
 bool isIn(Segment A, list<Segment> segs){
     auto it = segs.begin();
