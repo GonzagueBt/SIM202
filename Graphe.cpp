@@ -6,7 +6,9 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
     depart = x;
     fin = y;
     Obstacle final = constructionGraphe(obst, depart, fin);
+    cout<<"ajout point de départ"<<endl;
     final = addPointObstacle(final, depart); 
+    cout<<"ajout point de fin"<<endl;
     final = addPointObstacle(final, fin);  
     graphe_Obst = deleteSegCommun(final.segValides_contour);
     graphe_Autre = deleteSegCommun(final.segValides_reste);
@@ -17,7 +19,7 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
 
 Obstacle constructionGraphe(list<Obstacle> obst, Point x, Point y){
     list<Obstacle>::iterator its=obst.begin();
-    Obstacle final= *its;
+    Obstacle& final= *its;
     if(obst.size()>0 && (!isOutside(x, *its) || !isOutside(y, *its))){
         cout<<"Point d'arrivée ou de départ à l'intérieur d'un obstacle, problème non résoluble"<<endl;
         abort();
@@ -44,13 +46,15 @@ Obstacle addPointObstacle(Obstacle final, Point x){
 }
 
 
-Obstacle assemblage2Obstsacles(Obstacle ob1, Obstacle ob2){
+Obstacle assemblage2Obstsacles(Obstacle& ob1, Obstacle ob2){
     Obstacle ob=ob1;
     auto its = ob2.segValides_reste.begin();
     for(; its!= ob2.segValides_reste.end(); its++) ob.segValides_reste.push_back(*its);
     its = ob2.segValides_contour.begin();
     for(; its!= ob2.segValides_contour.end(); its++) ob.segValides_contour.push_back(*its);   
-    ob1 = overLapObstacles(ob, ob1, ob2);
+    list<Segment> toDelete;
+    list<Point> toDeleteP;
+    if(ob2.nbr_sommets>1) ob1 = overLapObstacles(toDelete, toDeleteP, ob, ob1, ob2);
 
     for(int i=0; i< (int) ob1.Sommets.size(); i++){
         for(int j=0; j< (int) ob2.Sommets.size(); j++){
@@ -79,6 +83,15 @@ Obstacle assemblage2Obstsacles(Obstacle ob1, Obstacle ob2){
             }
         }
     }
+    auto it3 = toDelete.begin();
+    for(; it3 != toDelete.end(); it3++){
+        cout<<"Suppression segment "<<it3->a<<"," <<it3->b<<endl;
+        ob1.deleteSegFromList(*it3);
+        ob2.deleteSegFromList(*it3);
+        ob.deleteSegFromList(*it3);
+    }
+    printSommet(ob.Sommets);
+    printSegments(ob.segValides_contour);
     ob.Sommets = concateVectorPoints(ob1.Sommets, ob2.Sommets);
     ob.nbr_sommets = ob.Sommets.size();
     return ob;
@@ -89,70 +102,61 @@ Obstacle assemblage2Obstsacles(Obstacle ob1, Obstacle ob2){
 //////////////////////////////////////////| GESTION OBSTACLES CHEVAUCHES |///////////////////////////////////////////
 //////////////////////////////////////////|------------------------------|///////////////////////////////////////////
 
-Obstacle overLapObstacles(Obstacle& ob, Obstacle& ob1, Obstacle& ob2){
+Obstacle overLapObstacles(list<Segment>& toDelete, list<Point>& toDeleteP, Obstacle& ob, Obstacle& ob1, Obstacle& ob2){
     cout<<"vérifications d'obstacles chevauchés"<<endl;
     auto it = ob1.segValides_contour.begin();
-    auto it2 = ob1.segValides_contour.begin();
+    auto it2 = ob2.segValides_contour.begin();
     it2++;
-    list<Segment> toDelete;
     for(; it!= ob1.segValides_contour.end();it++){
-        for(; it2!= ob1.segValides_contour.end() ;it2++){
-            if(it->a==it2->a || it->b==it2->a || it->a==it2->b || it->b==it2->b) continue;
+        for(; it2!= ob2.segValides_contour.end() ;it2++){
             if(intersect(*it, *it2)){
-                toDelete = checkIntersectionSeg(toDelete, *it, *it2, ob1, ob2, ob);
+                toDelete = checkIntersectionSeg(toDelete, toDeleteP, *it, *it2, ob1, ob2, ob);
             }
         }
-        it2 = ob1.segValides_contour.begin();
+        it2 = ob2.segValides_contour.begin();
     }
-    cout<<ob1.nbr_sommets<<endl;
-    printSommet(ob1.Sommets);
-    printSegments(ob1.segValides_contour);
-    auto it3 = toDelete.begin();
-    for(; it3 != toDelete.end(); it3++){
-        cout<<"Suppression segment "<<it3->a<<"," <<it3->b<<endl;
-        ob1.deleteSegFromList(*it3);
-        ob2.deleteSegFromList(*it3);
-        ob.deleteSegFromList(*it3);
+    auto it4 = toDeleteP.begin();
+    for(; it4 != toDeleteP.end(); it4++){
+        deletePointFromVector(ob.Sommets, *it4);
+        deletePointFromVector(ob1.Sommets, *it4);
+        deletePointFromVector(ob2.Sommets, *it4);
+        cout<<"point "<<*it4<<" supprimé"<<endl; 
     }
     return ob;
 }
 
 
-list<Segment> checkIntersectionSeg(list<Segment>& toDelete, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob){
+list<Segment> checkIntersectionSeg(list<Segment>& toDelete, list<Point>& toDeleteP, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob){
     Point inter = Intersction2Arcs(A,B);
-    if(A.a==inter || A.a==inter || A.b==inter || A.b==inter) return toDelete; // si l'intersection des segments et sur le somemt à tous les 2, tous les points sont segValides_reste
-    if(isIn(A.a, ob1.Sommets) &&  !isOutside(A.a, ob2) && !isIn(A, toDelete)){ 
-        toDelete = monitorInstersctSeg(toDelete, A.b, inter, B, A, ob2, ob1, ob);
-    }
-    else if(isIn(A.b, ob1.Sommets) &&  !isOutside(A.b, ob2) && !isIn(A, toDelete)){
-        toDelete = monitorInstersctSeg(toDelete, A.a, inter, B, A, ob2, ob1, ob);
-    }
-    else if(isIn(B.a, ob1.Sommets) &&  !isOutside(B.a, ob2) && !isIn(B, toDelete)){
-        toDelete = monitorInstersctSeg(toDelete, B.b, inter, A, B, ob1, ob2, ob);
-    }
-    else if(isIn(B.b, ob1.Sommets) &&  !isOutside(B.b, ob2) && !isIn(B, toDelete)){
-        toDelete = monitorInstersctSeg(toDelete, B.a, inter, A, B, ob1, ob2, ob);
-    }
+    toDelete.push_back(B);
+    toDelete.push_back(A);
+    ob1.Sommets.push_back(inter);
+    ob2.Sommets.push_back(inter);
+    ob.nbr_sommets += 1;
+    monitor1Point(toDelete,toDeleteP, A.a, A.b, inter, ob1, ob2, ob);
+    monitor1Point(toDelete,toDeleteP, A.b, A.a, inter, ob1, ob2, ob);
+    monitor1Point(toDelete,toDeleteP, B.a, B.b, inter, ob2, ob1, ob);
+    monitor1Point(toDelete,toDeleteP, B.b, B.a, inter, ob2, ob1, ob);
     return toDelete;
 }
 
-list<Segment> monitorInstersctSeg(list<Segment>& toDelete, Point x, Point inter, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob){
-    Segment nouveau(x, inter);
-    ob.segValides_contour.push_back(nouveau);
-    Segment test(A.a, inter);
+
+void monitor1Point(list<Segment>& toDelete, list<Point>& toDeleteP, Point x, Point oppose, Point inter, Obstacle ob1, Obstacle ob2, Obstacle& ob){
+    Segment newOne(x,inter);
+    if(!isOutside(x,ob2)){
+        if(! isIn(x, toDeleteP)) toDeleteP.push_back(x);       
+    }
+    Segment autre(oppose, inter);
     auto it = ob2.segValides_contour.begin();
-    bool mem = true;
-    for(; it != ob2.segValides_contour.end() ; it++) if(intersect(*it, test)) mem = false; 
-    if( mem && isOutside(A.a, ob1)){ ob.segValides_contour.push_back(test); cout<<"ajout du seg en 1"<<test<<endl;}
-    test = Segment(A.b,inter);
-    it = ob2.segValides_contour.begin();
-    mem = true;
-    for(; it != ob2.segValides_contour.end() ; it++) if(intersect(*it, test)) mem = false; 
-    if( mem && isOutside(A.b, ob1)){ ob.segValides_contour.push_back(test); cout<<"ajout du seg en 2"<<test<<endl;}
-    toDelete.push_back(B);
-    ob.Sommets.push_back(inter);
-    ob.nbr_sommets += 1;
-    return toDelete;
+    for(; it != ob2.segValides_contour.end() ; it++){
+        if(isOutside(oppose, ob2) && intersect(*it, autre)) return; //{ cout<<"tu paniques la ?"<<endl; toDelete= checkIntersectionSeg(toDelete, toDeleteP, autre, *it, ob1, ob2, ob); }
+    }
+    if(isOutside(x,ob2)){
+        ob.segValides_contour.push_back(newOne);
+    }
+    //return toDelete;
 }
+
+
 
 

@@ -10,6 +10,8 @@ int main(){
     Obstacles.push_back(ob2);
     Obstacle ob3 = ConstructObstacle(exemple3());
     //Obstacles.push_back(ob3);
+    Obstacle ob4 = ConstructObstacle(exemple4());
+    //Obstacles.push_back(ob4);
     cout<<"liste obstacle construite"<<endl;
     Point depart(0,0);
     Point fin(2,3);
@@ -17,7 +19,7 @@ int main(){
     cout<<endl;
     cout<<"=========== Construction Graphe ==========="<<endl;
     Graphe g(Obstacles, depart, fin);
-    cout<<"graphe g contruit"<<endl;
+    cout<<"Graphe g contruit"<<endl;
     printSegments(g.graphe_All);
     Point memory[g.nb_sommets];
     cout<<endl;
@@ -64,9 +66,18 @@ vector<Point> exemple2(){
 
 vector<Point> exemple3(){
     vector<Point> exemple;
-    exemple.push_back(Point(-2,2));
-    exemple.push_back(Point(2,2));
-    //exemple.push_back(Point(2,4));
-    //exemple.push_back(Point(-2,4));
+    exemple.push_back(Point(5,2));
+    exemple.push_back(Point(10,2));
+    exemple.push_back(Point(10,4));
+    exemple.push_back(Point(5,4));
+    return exemple;
+}
+
+vector<Point> exemple4(){
+    vector<Point> exemple;
+    exemple.push_back(Point(7,1));
+    exemple.push_back(Point(9,1));
+    exemple.push_back(Point(9,5));
+    exemple.push_back(Point(7,5));
     return exemple;
 }

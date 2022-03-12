@@ -57,7 +57,7 @@ bool ccw(const Point & A,const Point &B,const Point &C);
 bool intersect(const Point &A, const Point &B, const Point &C, const Point &D); 
 
 /**
- * @return renvoie true si AB intersecte CD
+ * @return renvoie true si A intersecte B
  */
 bool intersect(const Segment A, const Segment B);
 

@@ -37,6 +37,11 @@ Point operator | (const Point &u, const Point &v);
 vector<Point> concateVectorPoints(vector<Point> a, vector<Point> b);
 
 /**
+ * @brief Supprime un point d'un vecteur de point
+ */
+void deletePointFromVector(vector<Point>& a, Point x);
+
+/**
  * @brief Vérifie si un point appartient à un tableau de points
  * @param a : le point que l'on vérifie
  * @param memory : le tableau de poitns
@@ -50,6 +55,11 @@ int isIn(Point a, Point *memory, int nb);
  * @brief Vérifie si le  point a appartient au vecteur de points pts
  */
 bool isIn(Point a, vector<Point> pts);
+
+/**
+ * @brief Vérifie si le  point a appartient à la liste de points pts
+ */
+bool isIn(Point a, list<Point> pts);
 
 /**
  * @brief Print une liste de points

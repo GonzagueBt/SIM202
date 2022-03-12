@@ -44,6 +44,16 @@ vector<Point> concateVectorPoints(vector<Point> a, vector<Point> b){
     return pts;
 }
 
+void deletePointFromVector(vector<Point>& a, Point x){
+    auto it = a.begin();
+    for(; it!= a.end(); it++){
+        if(*it==x){
+            a.erase(it);
+            break;
+        }
+    }
+}
+
 int isIn(Point a, Point * memory, int nb){
     for(int i=0; i<nb; i++){
         if(a==memory[i]) return i;
@@ -54,6 +64,14 @@ int isIn(Point a, Point * memory, int nb){
 bool isIn(Point a, vector<Point> pts){
     for(int i=0; i< (int) pts.size(); i++){
         if(a==pts[i])return true; 
+    }
+    return false;
+}
+
+bool isIn(Point a, list<Point> pts){
+    auto it = pts.begin();
+    for(; it!= pts.end(); it++){
+        if(a==*it) return true;
     }
     return false;
 }

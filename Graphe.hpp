@@ -39,7 +39,7 @@ Obstacle addPointObstacle(Obstacle final, Point x);
  * appelle différentes fonctions pour gérer tous les potentiels cas d'erreurs
  * @return Un Obstacle contenant la concaténation de ob1 et ob2 
  */
-Obstacle assemblage2Obstsacles(Obstacle ob1, Obstacle ob2);
+Obstacle assemblage2Obstsacles(Obstacle& ob1, Obstacle ob2);
 
 //////////////////////////////// Gestion Chevauchement d'Obstacles ////////////////////////////////// 
 
@@ -48,7 +48,7 @@ Obstacle assemblage2Obstsacles(Obstacle ob1, Obstacle ob2);
  * La fonction appellent d'autres fonction pour régler les problèmes
  * @return l'obstacle ob avec les modifications nécessaires apportées.
  */
-Obstacle overLapObstacles(Obstacle& ob, Obstacle& ob1, Obstacle& ob2);
+Obstacle overLapObstacles(list<Segment>& toDelete, list<Point>& toDeleteP, Obstacle& ob, Obstacle& ob1, Obstacle& ob2);
 
 /**
  * @brief focntion appelé dans overLapObstacles, à partir des segments A et B qui se croisent, la fonction détermine la situation exact
@@ -56,7 +56,8 @@ Obstacle overLapObstacles(Obstacle& ob, Obstacle& ob1, Obstacle& ob2);
  * faut crée
  * @return la liste toDelete complété
  */
-list<Segment> checkIntersectionSeg(list<Segment>& toDelete, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob);
+list<Segment> checkIntersectionSeg(list<Segment>& toDelete, list<Point>& toDeleteP, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob);
+
 /**
  * @brief fonction appelé dans checkIntersectionSeg, effectue toute les modifications necéssaires pour gérer un chevauchement d'obstacles
  * @param toDelete une liste de segment à supprimer auquelle va être ajouté des élements dans la fonction
@@ -64,6 +65,5 @@ list<Segment> checkIntersectionSeg(list<Segment>& toDelete, Segment A, Segment B
  * @param inter le point d'intersection entre le segment A appartenant à l'obstacle ob1 et B appartenant à ob2
  * @return list<Segment> la liste toDelete complété
  */
-list<Segment> monitorInstersctSeg(list<Segment>& toDelete, Point x, Point inter, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob);
-
+void monitor1Point(list<Segment>& toDelete,list<Point>& toDeleteP, Point x,Point oppose, Point inter, Obstacle ob1, Obstacle ob2, Obstacle& ob);
 #endif
