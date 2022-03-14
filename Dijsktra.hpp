@@ -2,6 +2,7 @@
 #include <list>
 #include <fstream>
 #include "parserGraphe.hpp"
+#include "parserObstacle.h"
 
 /** 
  * @brief :  Effectue l'agorithme de Dijsktra sur un graphe 
