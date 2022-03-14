@@ -34,6 +34,8 @@ int main(){
     list<Point> chemin = cheminFinale(memory, p, g.nb_sommets);
     printPoints(chemin);
     cout<<endl;
+    cout<<"=========== Construction fichier Chevauchement.txt ==========="<<endl;
+    parserObstacle(Obstacles);
     cout<<"=========== Construction fichier graphe.txt ==========="<<endl;
     parserGraphe(g,chemin);
     return 0;
