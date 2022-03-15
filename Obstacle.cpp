@@ -1,42 +1,21 @@
-#include "Point.hpp"
-#include "Arc.hpp"
 #include "Obstacle.hpp"
-
-// Avec la classe obstacle on cherche à retourner tous les segments valides d'un obstacle.
-// Un segment est dit valide si il joint deux sommets d'un obstacle sans passer par l'intérieur de cet obstacle.
-// Rmq: On a supposé dans toute cette section (et dans tout le projet) que les sommets d'un obstacle seront construits
-// dans le sens trigonométrique.
-
-
-
-// On regarde d'abord si l'obstacle est convexe ou concave.
-// Ce sera très utile pour construire la liste des segmenst valides
-
-
-//////////////////////////////////////////|-----------------------------------|//////////////////////////////////
-//////////////////////////////////////////| Concavité/Convexité de l'obstacle |//////////////////////////////////
-//////////////////////////////////////////|-----------------------------------|//////////////////////////////////
-
 
 Point Coor_Vecteur_Normale(const Point & S_1, const Point & S_2){
     Point P = S_1 | S_2; // | oprérateur surchargé dans point.cpp
-    Point dir(P.y, -P.x);
-    // On utilise la matrice de rotation dans le sens horaire avec theta = Pi/2
-    return dir; // dir contient les coordonnées (sous forme de point) du vecteur normale sortant au segment [S_1,S_2]
+    Point dir(P.y, -P.x); // On utilise la matrice de rotation dans le sens horaire avec theta = Pi/2
+    return dir; 
 }
 
 vector<Point> Coor_Sommets_Normale(const Point & S_1, const Point & S_2){
-    vector<Point> res; // vecteur de points qui contient nos deux coordonnées: 
-    // point de départ du vecteur normale et point d'arrivée
+    vector<Point> res; // coordonnées du vecteur normale : point de départ et point d'arrivée
     Point debut = (S_1 + S_2) / 2; // le milieu du segment [S_1,S_2] est le point de départ du vecteur normale
     res.push_back(debut);
     Point direction = Coor_Vecteur_Normale(S_1, S_2); // la direction est donnée par la matrice de rotation
     Point fin(debut.x + direction.x, debut.y + direction.y);
     res.push_back(fin);
-    return res; // res contient deux points: le point de départ et celui d'arivée de la normale au segment [S_1,S_2]
+    return res; 
 }
 
-// Avec transfo on regarde si l'angle formé par deux segments est concave ou convexe
 bool transfo(const Point & a, const Point & b, const Point & c){
     vector<Point> P = Coor_Sommets_Normale(a,b);
     vector<Point> Q = Coor_Sommets_Normale(b,c);
@@ -61,16 +40,6 @@ bool Obstacle::concave_convexe(){
     return false;
 }
 
-
-//////////////////////////////|-------------------------------------------------|////////////////////////////////
-//////////////////////////////| Construction des segments valides de l'obstacle |////////////////////////////////
-//////////////////////////////|-------------------------------------------------|////////////////////////////////
-
-
-// Un premier outil utile est de savoir si il y a une intersection entre deux segments
-
-//////////////////////////////////////////| Intersection de 2 Segments |///////////////////////////////////////////
-
 bool ccw(const Point &A, const Point &B, const Point &C){ 
     return ((C.y-A.y) * (B.x-A.x)) > ((B.y-A.y) * (C.x-A.x));
 }
@@ -84,14 +53,6 @@ bool intersect(const Point &A, const Point &B, const Point &C, const Point &D){
 
 bool intersect(const Segment A, const Segment B){return intersect(A.a, A.b, B.a, B.b);} // true si A intersecte B
 
-
-// Un second outil utile est de savoir si un point est à l'extérieur d'un obstacle
-
-//////////////////////////////////////////| Point extérieur à l'obstacle |///////////////////////////////////////////
-
-// Le principe de cette fonction: on prend notre point x, on trace un demi-droite vertical vers l'infini.
-// Si cette demi droite à un nombre d'intersection paire avec les contours de notre obstacle, alors x
-// est forcément à l'extérieur de l'obstacle.
 bool isOutside(Point x, Obstacle ob){
     Point y(x.x, INT_MAX);
     int cpt = 0;
@@ -107,7 +68,7 @@ bool isOutside(Point x, Obstacle ob){
         // se trouve sur un coté de l'obstacle
         Point y(INT_MAX, x.y);
         cpt = 0;
-        auto its = ob.segValides_contour.begin();
+        list<Segment>::iterator its = ob.segValides_contour.begin();
         for(; its!= ob.segValides_contour.end(); its++){
             if(intersect(its->a, its->b, x, y)){
                 cpt++;
@@ -117,12 +78,6 @@ bool isOutside(Point x, Obstacle ob){
     }
    return false;
 }
-
-////////////////////////////////// Fonction principale d'obstacle //////////////////////////////////////////
-// Cette fonction remplit deux listes: 
-//      - segValides_contour qui contient les segments qui sont sur les bords de l'obstacle
-//      - segValides_reste qui contient les segments qui joignent deux sommets de l'obstacle 
-//        et qui ne forment pas un segment sur le bord de l'obstacle
 
 void Obstacle::constructionSeg(){
     if (concave_convexe() == true){ 
@@ -151,7 +106,7 @@ void Obstacle::constructionSeg(){
             for(int j = i + 1; j < this->nbr_sommets; j++){
                 Segment arete(this->Sommets[i],this->Sommets[j]);
                 if(isIn(arete, segValides_contour)) continue;
-                auto it = this->segValides_contour.begin();
+                list<Segment>::iterator it = this->segValides_contour.begin();
                 bool memory = true;
                 for(; it != this->segValides_contour.end(); it++){
                     if((intersect(arete, *it) && (arete.a!= it->a && arete.a!= it->b && arete.b!= it->a && arete.b!= it->b))){
@@ -170,9 +125,6 @@ void Obstacle::constructionSeg(){
 }
 
 
-// On termine cette classe avec deux fonctions "pratiques"
-
-// La première efface un segment d'une liste de segment
 void Obstacle::deleteSegFromList(Segment seg){
     list<Segment>::iterator it = segValides_contour.begin();
     for(; it!= segValides_contour.end(); it++){
@@ -183,22 +135,11 @@ void Obstacle::deleteSegFromList(Segment seg){
     }
 }
 
-// La seconde nous sert pour instancier les obstacles dans le main
 Obstacle ConstructObstacle(vector<Point> V){
     Obstacle Obs(V, V.size());
     Obs.constructionSeg();
     return Obs;
 }
-
-/* Fonction print pour faire des tests
-void printSegValides(list<Segment> liste){
-    list<Segment>::iterator its = liste.begin();
-    for(; its!= liste.end(); its++){
-        cout<<"("<<its->a<<","<<its->b<<")  ";
-    }
-    cout<<endl;
-}
-*/
 
 
 
