@@ -2,11 +2,11 @@
 #define PARSEROBSTACLE_H_INCLUDED
 
 #include <list>
-#include "Obstacle.h"
+#include "Obstacle.hpp"
 
 /**
- * @brief Création d'un fichier .txt contenant les informations des différents obstacles avant chevauchement
- * @param l_obs : la liste d'obstacles à afficher
+ * @brief Crï¿½ation d'un fichier .txt contenant les informations des diffï¿½rents obstacles avant chevauchement
+ * @param l_obs : la liste d'obstacles ï¿½ afficher
  */
 void parserObstacle(list<Obstacle> l_obs);
 

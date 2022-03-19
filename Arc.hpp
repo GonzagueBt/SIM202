@@ -20,7 +20,10 @@ class Segment : public Arc{
     public:
         Segment(Point x, Point y);
         bool operator==(const Segment);
+        bool operator!=(const Segment);
 }; 
+
+double distance(Point x, Point y);
 
 /**
  * @brief Calcule le point d'intersection de 2 arcs/segments
@@ -54,6 +57,9 @@ list<Segment> deleteSegCommun(list<Segment>  liste);
  * @brief Compte le nombre de points d'un vector de points non utilisés dans une liste de segments
  */
 int sommetsNonUsed(vector<Point> pts, list<Segment> segs);
+
+void deleteSegWithPt(list<Segment>& toDelete, list<Segment> segs, Point pt);
+bool isConfused(Segment A, Segment B);
 
 /**
  * @brief Print une liste de Segment

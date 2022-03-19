@@ -7,3 +7,5 @@
  * @param chemin : le parcourt solution du graphe 
  */
 void parserGraphe(Graphe g, list<Point> chemin);
+
+void parserObstacle(Graphe g, list<Point> chemin);

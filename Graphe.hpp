@@ -26,44 +26,35 @@ class Graphe{
  * @param y : le point de fin
  * @return un Obstacle contenant tous les obstacles concaténés en un seul.
  */
-Obstacle constructionGraphe(list<Obstacle> obst, Point x, Point y);
+Obstacle constructionGraphe(list<Obstacle> obst, Point x, Point y, list<Segment>& toDelete);
 /**
  * @brief Ajoute un point seul à un obstacle
  * Utile pour les points d'arrivé et de fin
  * @return Obstacle 
  */
-Obstacle addPointObstacle(Obstacle final, Point x);
+Obstacle addPointObstacle(Obstacle final, Point x, list<Segment>& toDelete);
 
 /**
  * @brief Fait l'assemblage de 2 obstacles
  * appelle différentes fonctions pour gérer tous les potentiels cas d'erreurs
  * @return Un Obstacle contenant la concaténation de ob1 et ob2 
  */
-Obstacle assemblage2Obstsacles(Obstacle& ob1, Obstacle ob2);
+Obstacle assemblage2Obstsacles(Obstacle& ob1, Obstacle ob2, list<Segment>& toDelete);
+
+void deleteSegConfused(Obstacle ob1, Obstacle ob2, Point x, list<Segment>& toDelete);
+
+bool isASide(Segment A, Segment B, Point x);
+
+Obstacle lastCheck(Obstacle final);
 
 //////////////////////////////// Gestion Chevauchement d'Obstacles ////////////////////////////////// 
 
-/**
- * @brief Parcours les obstacles ob1 et ob2 pour check si 2 de leur segments se chevauchent, et donc si les obstacles se chevauchent 
- * La fonction appellent d'autres fonction pour régler les problèmes
- * @return l'obstacle ob avec les modifications nécessaires apportées.
- */
-Obstacle overLapObstacles(list<Segment>& toDelete, list<Point>& toDeleteP, Obstacle& ob, Obstacle& ob1, Obstacle& ob2);
+void checkIntersectionObsts(list<Segment>& toDelete, Obstacle& ob1, Obstacle& ob2);
 
 /**
- * @brief focntion appelé dans overLapObstacles, à partir des segments A et B qui se croisent, la fonction détermine la situation exact
- * c'est à dire quel point de quel segment se situe à l'intérieur de quel Obstacle, quels segments il faut supprimer, quels segments ils
- * faut crée
- * @return la liste toDelete complété
+ * @brief Trie un vecteur de points dans l'ordre du plus proche du points à l'index 0 au plus loin
+ * COULD BE BETTER : idéalement il faudrait utiliser la fonction sort() de std, à faire si reste du temps 
+ * @return vector<Point> 
  */
-list<Segment> checkIntersectionSeg(list<Segment>& toDelete, list<Point>& toDeleteP, Segment A, Segment B, Obstacle& ob1, Obstacle& ob2, Obstacle& ob);
-
-/**
- * @brief fonction appelé dans checkIntersectionSeg, effectue toute les modifications necéssaires pour gérer un chevauchement d'obstacles
- * @param toDelete une liste de segment à supprimer auquelle va être ajouté des élements dans la fonction
- * @param x le point du segment A a supprimé, que l'on conserve pour créer un autre segment avec le point d'intersection de l'autre obstacle
- * @param inter le point d'intersection entre le segment A appartenant à l'obstacle ob1 et B appartenant à ob2
- * @return list<Segment> la liste toDelete complété
- */
-void monitor1Point(list<Segment>& toDelete,list<Point>& toDeleteP, Point x,Point oppose, Point inter, Obstacle ob1, Obstacle ob2, Obstacle& ob);
+vector<Point> sortByDist(vector<Point> pts);
 #endif

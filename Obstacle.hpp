@@ -25,7 +25,13 @@ public:
     bool concave_convexe(); // true = obstacle convexe, false = obstacle concave
     void constructionSeg(); // remplit une liste de segments valides
     Obstacle Padding(const int &r);
-    void deleteSegFromList(Segment seg);
+    
+    /**
+     * @brief Supprimer un segment d'une liste de l'Obstacle
+     * @param seg le segment à supprimer
+     * @param index la liste dans laquelle on doit supprimer le segment : ="contour" pour la liste segValides_contour, et ="reste" pour la liste segValides_reste
+     */
+    void deleteSegFromList(Segment seg, string index);
 };
 
 

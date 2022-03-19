@@ -45,6 +45,8 @@ bool ccw(const Point &A, const Point &B, const Point &C){
 }
 
 bool intersect(const Point &A, const Point &B, const Point &C, const Point &D){
+    //if(isConfused(Segment(A,B),Segment(A,C)) || isConfused(Segment(A,B),Segment(A,D))) return false;
+    //if(isConfused(Segment(C,D),Segment(C,A)) || isConfused(Segment(C,D),Segment(C,B))) return false;
     if(A==C || A==D || B==C || B==D) return false; // si il y a intersection sur les points de départs ou 
                                                    // d'arrivées des segments on considère qu'il n'y a pas 
                                                    // d'intersection
@@ -88,7 +90,7 @@ void Obstacle::constructionSeg(){
             segValides_contour.push_back(var1);
         }
         Segment var2(this->Sommets[this->nbr_sommets-1], this->Sommets[0]);
-        segValides_contour.push_back(var2);
+        if(!isIn(var2, segValides_contour)) segValides_contour.push_back(var2);
     }
     else{ 
     // on remplit la liste des segments valides en faisant le tour de l'obstacle et en considérant
@@ -98,7 +100,7 @@ void Obstacle::constructionSeg(){
             segValides_contour.push_back(var1);
         }
         Segment var2(this->Sommets[this->nbr_sommets-1], this->Sommets[0]);
-        segValides_contour.push_back(var2);
+        if(!isIn(var2, segValides_contour)) segValides_contour.push_back(var2);
         // Les conditions pour qu'un segment qui n'est pas sur le bord soit valide sont les suivantes:
         // il ne doit pas intersecter un segment sur le bord de l'obstacle
         // son milieu doit être à l'extérieur de l'obstacle
@@ -125,11 +127,22 @@ void Obstacle::constructionSeg(){
 }
 
 
-void Obstacle::deleteSegFromList(Segment seg){
-    list<Segment>::iterator it = segValides_contour.begin();
-    for(; it!= segValides_contour.end(); it++){
+void Obstacle::deleteSegFromList(Segment seg, string index){
+    list<Segment>::iterator it;
+    list<Segment>::iterator fin;
+    if(index== "contour"){
+        it = segValides_contour.begin();
+        fin = segValides_contour.end();
+    }
+    else if(index=="reste"){
+        it = segValides_reste.begin();
+        fin = segValides_reste.end();       
+    }
+    else abort();
+    for(; it!= fin; it++){
         if(*it==seg){
-            segValides_contour.erase(it);
+            if(index=="contour") segValides_contour.erase(it);
+            else segValides_reste.erase(it);
             return;
         }
     }

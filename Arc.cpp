@@ -3,7 +3,7 @@
 
 ostream&operator<<(ostream& os, const Arc &A)
 {
-os<<"("<<A.a<<";"<<A.b<<")"<<endl;;
+os<<"("<<A.a<<";"<<A.b<<")";
 return os;
 }
 
@@ -13,10 +13,20 @@ Segment::Segment(Point x, Point y){
     poid = sqrt(square(x.x - y.x) + square(x.y - y.y));
 }
 
+double distance(Point x, Point y){
+    return sqrt(square(x.x - y.x) + square(x.y - y.y));
+}
+
 bool Segment::operator==(const Segment A){
     if((a==A.a && b==A.b) || (a==A.b && b==A.a)) return true;
     return false;
 }
+
+bool Segment::operator!=(const Segment A){
+    if((a==A.a && b==A.b) || (a==A.b && b==A.a)) return false;
+    return true;
+}
+    
 
 
 Point Intersction2Arcs(Arc A, Arc B){
@@ -34,6 +44,8 @@ Point Intersction2Arcs(Arc A, Arc B){
     if (determinant == 0)  exit(-1);
     double x = (b2*c1 - b1*c2)/determinant;
     double y = (a1*c2 - a2*c1)/determinant;
+    if(x==-0) x=0;
+    if(y==-0) y=0;
     return Point(x,y);
 }
 
@@ -78,6 +90,7 @@ list<Segment> deleteSegCommun(list<Segment> liste){
         }
         if(isInvalide){ 
             its++;
+            cout<<"suppression segemnt "<<*memory<<endl;
             liste.erase(memory);
         }
         else its++;
@@ -99,6 +112,27 @@ int sommetsNonUsed(vector<Point> pts, list<Segment> segs){
         if(!isUsed) cpt++;
     }
     return cpt;
+}
+
+void deleteSegWithPt(list<Segment>& toDelete, list<Segment> segs, Point pt){
+    auto it = segs.begin();
+    for(; it!= segs.end(); it++){
+        if(it->a==pt || it->b==pt){
+            if(!isIn(*it, toDelete)){ toDelete.push_back(*it); cout<<"segment : "<<*it<<" supprimé ll"<<endl; }
+        }
+    }
+}
+
+bool isConfused(Segment A, Segment B){
+    Point u = A.a;
+    Point v = A.b;
+    double coeff = (v.y-u.y)/(v.x-u.x);
+    double x = u.y - coeff*u.x;
+    u = B.a;
+    v = B.b;
+    coeff = (v.y-u.y)/(v.x-u.x);
+    double y = u.y - coeff*u.x;
+    return x==y;
 }
 
 void printSegments(list<Segment> liste){
