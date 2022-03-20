@@ -1,4 +1,4 @@
-fid = fopen('Chevauchement.txt');
+fid = fopen('obstacles.txt');
 n0 = textscan(fid,'%d',1); %lecture du nombre d'obstacles
 n = n0{1,1};
 

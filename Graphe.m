@@ -1,4 +1,4 @@
-fid = fopen('GGraphe3.txt');
+fid = fopen('Graphe.txt');
 r0 = textscan(fid,'%d',1); %lecture du nombre de segments valides autres (qui ne constituent pas les obstacles)
 r = r0{1,1};
 p0 = textscan(fid,'%d',1); %lecture du nombre de segments valides qui forment les obstacles

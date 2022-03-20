@@ -17,7 +17,7 @@ int main(){
     Obstacle ob6 = ConstructObstacle(exemple6());
     //Obstacles.push_back(ob6);
     cout<<"liste obstacle construite"<<endl;
-    parserObstacle(Obstacles);
+    parserObstacles(Obstacles);
     Point depart(0,0);
     Point fin(0,2);
     cout<<"Point depart et fin construit"<<endl;
@@ -42,7 +42,7 @@ int main(){
     printPoints(chemin);
     cout<<endl;
     cout<<"=========== Construction fichier Chevauchement.txt ==========="<<endl;
-    parserObstacle(Obstacles);
+    parserObstacles(Obstacles);
     cout<<"=========== Construction fichier graphe.txt ==========="<<endl;
     parserGraphe(g,chemin);
     parserObstacle(g, chemin);

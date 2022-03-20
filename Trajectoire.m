@@ -1,4 +1,4 @@
-fid = fopen('Graphe&trajectoire.txt');
+fid = fopen('trajectoire.txt');
 p0 = textscan(fid,'%d',1); %lecture du nombre de segments valides qui forment les obstacles
 p = p0{1,1};
 n0 = textscan(fid,'%d',1); %lecture du nombre d'obstacles
