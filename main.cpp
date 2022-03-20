@@ -5,21 +5,27 @@ int main(){
     cout<<"=========== Initialisation Graphe ==========="<<endl;
     Obstacle ob1 = ConstructObstacle(exemple());
     list<Obstacle> Obstacles;
-    Obstacles.push_back(ob1);
+    //Obstacles.push_back(ob1);
     Obstacle ob2 = ConstructObstacle(exemple2());
     Obstacles.push_back(ob2);
     Obstacle ob3 = ConstructObstacle(exemple3());
-    //Obstacles.push_back(ob3);
+    Obstacles.push_back(ob3);
     Obstacle ob4 = ConstructObstacle(exemple4());
     //Obstacles.push_back(ob4);
+    Obstacle ob5 = ConstructObstacle(exemple5());
+    //Obstacles.push_back(ob5);
+    Obstacle ob6 = ConstructObstacle(exemple6());
+    //Obstacles.push_back(ob6);
     cout<<"liste obstacle construite"<<endl;
+    parserObstacle(Obstacles);
     Point depart(0,0);
-    Point fin(2,3);
+    Point fin(0,2);
     cout<<"Point depart et fin construit"<<endl;
     cout<<endl;
     cout<<"=========== Construction Graphe ==========="<<endl;
     Graphe g(Obstacles, depart, fin);
     cout<<"Graphe g contruit"<<endl;
+    cout<<"liste des segments du graphe"<<endl;
     printSegments(g.graphe_All);
     Point memory[g.nb_sommets];
     cout<<endl;
@@ -32,12 +38,14 @@ int main(){
     double p[g.nb_sommets];
     Dijsktra(g.nb_sommets, c, l, p);
     list<Point> chemin = cheminFinale(memory, p, g.nb_sommets);
+    cout<<"chemin optimal : ";
     printPoints(chemin);
     cout<<endl;
     cout<<"=========== Construction fichier Chevauchement.txt ==========="<<endl;
     parserObstacle(Obstacles);
     cout<<"=========== Construction fichier graphe.txt ==========="<<endl;
     parserGraphe(g,chemin);
+    parserObstacle(g, chemin);
     return 0;
 }
 
@@ -59,19 +67,19 @@ vector<Point> exemple(){
 
 vector<Point> exemple2(){
     vector<Point> exemple;
-    exemple.push_back(Point(1.5,0));
-    exemple.push_back(Point(4,0));
-    exemple.push_back(Point(4,3));
-    exemple.push_back(Point(1.5,3));
+    exemple.push_back(Point(-2,1));
+    exemple.push_back(Point(1,1));
+    exemple.push_back(Point(1,2));
+    exemple.push_back(Point(-2,2));
     return exemple;
 }
 
 vector<Point> exemple3(){
     vector<Point> exemple;
-    exemple.push_back(Point(5,2));
-    exemple.push_back(Point(10,2));
-    exemple.push_back(Point(10,4));
-    exemple.push_back(Point(5,4));
+    exemple.push_back(Point(1,2));
+    exemple.push_back(Point(1,4));
+    exemple.push_back(Point(0,4));
+    exemple.push_back(Point(0,2));
     return exemple;
 }
 
@@ -84,6 +92,32 @@ vector<Point> exemple4(){
     return exemple;
 }
 
+vector<Point> exemple5(){
+    vector<Point> exemple;
+    exemple.push_back(Point(0,0));
+    exemple.push_back(Point(2,0));
+    exemple.push_back(Point(2,6));
+    exemple.push_back(Point(0,6));
+    return exemple;
+}
+
+vector<Point> exemple6(){
+    vector<Point> exemple;
+    exemple.push_back(Point(-2,1));
+    exemple.push_back(Point(3,1));
+    exemple.push_back(Point(3,2));
+    exemple.push_back(Point(-1,2));
+    exemple.push_back(Point(-1,3));
+    exemple.push_back(Point(3,3));
+    exemple.push_back(Point(3,4));
+    exemple.push_back(Point(-1,4));
+    exemple.push_back(Point(-2,4));
+    return exemple;
+}
+
+
+
+/**
 vector <Point> depart; depart.push_back(Point(-14,3)); Obstacle D = ConstructObstacle(depart);
 
     vector<Point> Sommets1;
@@ -255,5 +289,5 @@ vector <Point> depart; depart.push_back(Point(-14,3)); Obstacle D = ConstructObs
     Obstacle N32 = ConstructObstacle(Sommets32);
 
     vector <Point> arrivee; arrivee.push_back(Point(15,-8)); Obstacle A = ConstructObstacle(arrivee);
-
+**/
     

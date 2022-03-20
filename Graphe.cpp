@@ -7,23 +7,19 @@ Graphe::Graphe(list<Obstacle> obst, Point x, Point y){
     fin = y;
     list<Segment> toDelete;
     Obstacle final = constructionGraphe(obst, depart, fin, toDelete);
-    printSommet(final.Sommets);
     cout<<"ajout point de départ"<<endl;
     final = addPointObstacle(final, depart, toDelete); 
     cout<<"ajout point de fin"<<endl;
     final = addPointObstacle(final, fin, toDelete); 
     auto it3 = toDelete.begin();
     for(; it3 != toDelete.end(); it3++){
-        cout<<"segment : " << *it3<< "supprimé"<<endl;
         final.deleteSegFromList(*it3, "contour");
         final.deleteSegFromList(*it3, "reste");
     }
-    printSegments(final.segValides_contour);
     graphe_Obst = deleteSegCommun(final.segValides_contour);
     graphe_Autre = final.segValides_reste;
     graphe_All = concateListe(graphe_Obst, graphe_Autre, true);
     nb_sommets = final.nbr_sommets - sommetsNonUsed(final.Sommets, graphe_All);
-    printSommet(final.Sommets);
 }
 
 
@@ -126,8 +122,8 @@ void deleteSegConfused(Obstacle ob1, Obstacle ob2, Point x, list<Segment>& toDel
             if(it2->a!=x && it2->b!=x) continue;
             if(isConfused(*it, *it2)){
                 if(!isASide(*it, *it2, x)) continue;
-                if(it->poid < it2->poid && !isIn(*it, toDelete) && !isIn(*it2, toDelete)){cout<<"je delete "<<*it<<endl; toDelete.push_back(*it);}
-                else if(!isIn(*it2, toDelete) && !isIn(*it, toDelete)){ cout<<"je delete "<<*it<<endl; toDelete.push_back(*it2);}
+                if(it->poid < it2->poid && !isIn(*it, toDelete) && !isIn(*it2, toDelete)) toDelete.push_back(*it);
+                else if(!isIn(*it2, toDelete) && !isIn(*it, toDelete))toDelete.push_back(*it2);
             }
         }
     }
@@ -144,7 +140,6 @@ bool isASide(Segment A, Segment B, Point x){
     else if(!isIn(B.a, sortPt)) sortPt.push_front(B.a);
     if(B.b<x && !isIn(B.b, sortPt)) sortPt.push_back(B.b);
     else if(!isIn(B.b, sortPt)) sortPt.push_front(B.b);
-    //if(x==Point(1,2)) printPoints(sortPt);
     if(sortPt.front()==x || sortPt.back()==x) return true;
     return false;
 }
@@ -193,7 +188,6 @@ void checkIntersectionObsts(list<Segment>& toDelete, Obstacle& ob1, Obstacle& ob
             }
         }
         if(!haveIntersct) continue;
-        cout<<A<<" inteserct"<<endl;
         toDelete.push_back(A);
         intersects = sortByDist(intersects);
         intersects.push_back(A.b);
@@ -205,11 +199,9 @@ void checkIntersectionObsts(list<Segment>& toDelete, Obstacle& ob1, Obstacle& ob
             segToAdd.push_back(Segment(intersects[i], intersects[i+1]));
             if(!isIn(intersects[i], ob1.Sommets) && !isIn(intersects[i], ob2.Sommets)){
                 ob1.Sommets.push_back(intersects[i]);
-                //ob2.Sommets.push_back(intersects[i]);
             }
             if(!isIn(intersects[i+1], ob1.Sommets) && !isIn(intersects[i+1], ob2.Sommets)){
                 ob1.Sommets.push_back(intersects[i+1]);
-                //ob2.Sommets.push_back(intersects[i+1]);
             }
             ob1.nbr_sommets+=1;
             ob2.nbr_sommets+=1;
@@ -236,7 +228,6 @@ void checkIntersectionObsts(list<Segment>& toDelete, Obstacle& ob1, Obstacle& ob
             }
         }
         if(!haveIntersct) continue;
-        cout<<A<<" interserct"<<endl;
         toDelete.push_back(A);
         intersects = sortByDist(intersects);
         intersects.push_back(A.b);
@@ -247,11 +238,9 @@ void checkIntersectionObsts(list<Segment>& toDelete, Obstacle& ob1, Obstacle& ob
             if(intersects[i]== A.b) break;
             segToAddBis.push_back(Segment(intersects[i], intersects[i+1]));
             if(!isIn(intersects[i], ob2.Sommets) && !isIn(intersects[i], ob1.Sommets)){
-                //ob1.Sommets.push_back(intersects[i]);
                 ob2.Sommets.push_back(intersects[i]);
             }
             if(!isIn(intersects[i+1], ob1.Sommets) && !isIn(intersects[i+1], ob2.Sommets)){
-                //ob1.Sommets.push_back(intersects[i+1]);
                 ob2.Sommets.push_back(intersects[i+1]);
             }
             ob1.nbr_sommets+=1;
@@ -264,13 +253,11 @@ void checkIntersectionObsts(list<Segment>& toDelete, Obstacle& ob1, Obstacle& ob
     for(; it3 != segToAdd.end(); it3++){
         ob1.segValides_reste.push_back(*it3);
         ob1.segValides_contour.push_back(*it3);
-        cout<<"segment "<<*it3<<" ajouté"<<endl;
     }
     it3 = segToAddBis.begin();
     for(; it3 != segToAddBis.end(); it3++){
         ob2.segValides_reste.push_back(*it3);
         ob2.segValides_contour.push_back(*it3);
-        cout<<"segment "<<*it3<<" ajouté"<<endl;
     }
     auto it4 = toDeleteP.begin();
     for(; it4 != toDeleteP.end(); it4++){

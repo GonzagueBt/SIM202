@@ -58,7 +58,15 @@ list<Segment> deleteSegCommun(list<Segment>  liste);
  */
 int sommetsNonUsed(vector<Point> pts, list<Segment> segs);
 
+/**
+ * @brief Ajoute à la liste de segment à supprimer, tous les segments de la liste segs contenant le point pt 
+ */
 void deleteSegWithPt(list<Segment>& toDelete, list<Segment> segs, Point pt);
+
+/**
+ * @brief Regarde si les segments ont une partie commune (c'est à dire qu'ils sont colinéaires)
+ * @return renvoie true  si c'est le cas
+ */
 bool isConfused(Segment A, Segment B);
 
 /**

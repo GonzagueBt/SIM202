@@ -5,26 +5,18 @@ EXEC=main
 SRC=$(wildcard *.cpp)
 OBJ=$(SRC:.cpp=.o)
  
-all: $(EXEC)
- 
 main: $(OBJ)
 	$(CXX) -o $@  $^ $(LDFLAGS)
 
 Dijsktra : Dijsktra.o Arc.o Point.o
 	$(CXX) -o Dijsktra $^
 
-Graphe : Graphe.o Obstacle.o Arc.o Point.o
-	$(CXX) -o Graphe $^
 
-m : 
+all : 
 	make clean
 	make 
 	./main
 
-d : 
-	make clean
-	make Dijsktra
-	./Dijsktra
  
 .PHONY: clean mrproper
 
@@ -37,7 +29,6 @@ clean:
 	rm -rf main
 	rm -rf Dijsktra
 	rm -rf Graphe
-	rm -rf Graphe.txt
 
  
 mrproper: clean

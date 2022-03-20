@@ -41,14 +41,33 @@ Obstacle addPointObstacle(Obstacle final, Point x, list<Segment>& toDelete);
  */
 Obstacle assemblage2Obstsacles(Obstacle& ob1, Obstacle ob2, list<Segment>& toDelete);
 
+/**
+ * @brief Gére les morceaux de segments commun entre 2 obstacles : c'est à dire quand un sommet est commun et que 2 segments 
+ * sont colinéaires. Dans ce cas, si les 2 segments ont bien une distance en commun, le plus petit segment ajouté à la liste de segment 
+ * à supprimer toDelete
+ * @param ob1 
+ * @param ob2 
+ * @param x 
+ * @param toDelete 
+ */
 void deleteSegConfused(Obstacle ob1, Obstacle ob2, Point x, list<Segment>& toDelete);
 
+/**
+ * @brief Utiliser pour la gestion des segments commun entre 2 obstacles
+ */
 bool isASide(Segment A, Segment B, Point x);
 
+/**
+ * @brief Ultime vérification, pour supprimer d'éventuels segments non valide qui aurai réussi à passer
+ */
 Obstacle lastCheck(Obstacle final);
 
 //////////////////////////////// Gestion Chevauchement d'Obstacles ////////////////////////////////// 
 
+/**
+ * @brief Gère les chevauchements de 2 obstacles, détecte les segments de contour d'obstacle et les ajoute à la liste de segments à supprimer
+ * toDelete, supprimer les points qui sont à l'intérieur de l'autre obstacle. 
+ */
 void checkIntersectionObsts(list<Segment>& toDelete, Obstacle& ob1, Obstacle& ob2);
 
 /**

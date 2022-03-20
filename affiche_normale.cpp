@@ -1,7 +1,4 @@
-#include "Point.h"
-#include "Arc.hpp"
-#include "Obstacle.h"
-#include "affiche_normale.h"
+#include "affiche_normale.hpp"
 #include <vector>
 #include<list>
 ofstream out2;
@@ -21,7 +18,7 @@ vector<Point> affichage_normale(Obstacle Ob)
     return res;
 }
 
-// Crée un fichier avec les coordonnées 1 obstacle et ses normales
+// Crï¿½e un fichier avec les coordonnï¿½es 1 obstacle et ses normales
 void parserNormales(Obstacle obs)
 {
     vector<Point> normales = affichage_normale(obs);
