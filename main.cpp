@@ -167,6 +167,20 @@ list<Obstacle> exampleobsts(){
     Sommets10.push_back(Point(13,13));
     Sommets10.push_back(Point(12,13));
     obsts.push_back(ConstructObstacle(Sommets10));
+
+    vector<Point> Sommets11;
+    Sommets11.push_back(Point(15,-2)); 
+    Sommets11.push_back(Point(17,-2)); 
+    Sommets11.push_back(Point(17,5));
+    Sommets11.push_back(Point(15,5)); 
+    obsts.push_back(ConstructObstacle(Sommets11));
+
+    vector<Point> Sommets12;
+    Sommets12.push_back(Point(12,-1)); 
+    Sommets12.push_back(Point(16,-1)); 
+    Sommets12.push_back(Point(18,1));
+    Sommets12.push_back(Point(12,1)); 
+    obsts.push_back(ConstructObstacle(Sommets12));
     return obsts;
 }
 
