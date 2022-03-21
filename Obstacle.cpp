@@ -117,7 +117,7 @@ void Obstacle::constructionSeg(){
                 }
                 if(memory){
                     Point x = (this->Sommets[i]+this->Sommets[j])/2;
-                    if(isOutside(x, *this) && !isIn(arete, this->segValides_reste)){
+                    if(isOutside(x, *this) && !isIn(x, this->Sommets) && !isIn(arete, this->segValides_reste)){
                         this->segValides_reste.push_back(arete);
                     }
                 }

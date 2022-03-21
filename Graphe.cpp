@@ -101,7 +101,7 @@ Obstacle assemblage2Obstsacles(Obstacle& ob1, Obstacle ob2, list<Segment>& toDel
                 } 
             }
             if(!isValide) continue;
-            //if(!isOutside(ob1.Sommets[i], ob2) || !isOutside(ob2.Sommets[j], ob1)) isValide = false;
+            if(!isOutside(ob1.Sommets[i], ob2) || !isOutside(ob2.Sommets[j], ob1)) isValide = false;
             if(isValide){
                 Segment newSeg = Segment(ob1.Sommets[i], pt2);
                 if(!isIn(newSeg, ob.segValides_reste)) ob.segValides_reste.push_back(newSeg);
