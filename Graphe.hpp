@@ -50,7 +50,7 @@ Obstacle assemblage2Obstsacles(Obstacle& ob1, Obstacle ob2, list<Segment>& toDel
  * @param x 
  * @param toDelete 
  */
-void deleteSegConfused(Obstacle ob1, Obstacle ob2, Point x, list<Segment>& toDelete);
+void deleteSegConfused(Obstacle& ob, Obstacle& ob1, Obstacle& ob2, Point x, list<Segment>& toDelete);
 
 /**
  * @brief Utiliser pour la gestion des segments commun entre 2 obstacles

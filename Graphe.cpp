@@ -79,7 +79,7 @@ Obstacle assemblage2Obstsacles(Obstacle& ob1, Obstacle ob2, list<Segment>& toDel
     for(int i=0; i< (int) ob1.Sommets.size(); i++){
         for(int j=0; j< (int) ob2.Sommets.size(); j++){
             if(isIn(ob2.Sommets[j], ob1.Sommets)){
-                deleteSegConfused(ob1, ob2, ob2.Sommets[j], toDelete);
+                deleteSegConfused(ob, ob1, ob2, ob2.Sommets[j], toDelete);
             }
             Point pt2 = ob2.Sommets[j];
             if(ob1.Sommets[i]==pt2) continue;
@@ -101,7 +101,7 @@ Obstacle assemblage2Obstsacles(Obstacle& ob1, Obstacle ob2, list<Segment>& toDel
                 } 
             }
             if(!isValide) continue;
-            //if(!isOutside(ob1.Sommets[i], ob2) /*|| !isOutside(ob2.Sommets[j], ob1)*/) isValide = false;
+            //if(!isOutside(ob1.Sommets[i], ob2) || !isOutside(ob2.Sommets[j], ob1)) isValide = false;
             if(isValide){
                 Segment newSeg = Segment(ob1.Sommets[i], pt2);
                 if(!isIn(newSeg, ob.segValides_reste)) ob.segValides_reste.push_back(newSeg);
@@ -113,7 +113,7 @@ Obstacle assemblage2Obstsacles(Obstacle& ob1, Obstacle ob2, list<Segment>& toDel
     return ob;
 }
 
-void deleteSegConfused(Obstacle ob1, Obstacle ob2, Point x, list<Segment>& toDelete){
+void deleteSegConfused(Obstacle& ob, Obstacle& ob1, Obstacle& ob2, Point x, list<Segment>& toDelete){
     auto it = ob1.segValides_contour.begin();
     for(;it != ob1.segValides_contour.end();it++){
         if(it->a!=x && it->b!=x) continue;
@@ -122,8 +122,30 @@ void deleteSegConfused(Obstacle ob1, Obstacle ob2, Point x, list<Segment>& toDel
             if(it2->a!=x && it2->b!=x) continue;
             if(isConfused(*it, *it2)){
                 if(!isASide(*it, *it2, x)) continue;
-                if(it->poid < it2->poid && !isIn(*it, toDelete) && !isIn(*it2, toDelete)) toDelete.push_back(*it);
-                else if(!isIn(*it2, toDelete) && !isIn(*it, toDelete))toDelete.push_back(*it2);
+                if(it->poid < it2->poid && !isIn(*it, toDelete) && !isIn(*it2, toDelete)){
+                    toDelete.push_back(*it);
+                    toDelete.push_back(*it2);
+                    if(it2->a!=x){
+                        if(it->a!=x) ob.segValides_contour.push_back(Segment(it2->a, it->a));
+                        else ob.segValides_contour.push_back(Segment(it2->a, it->b));
+                    } 
+                    else{
+                        if(it->a!=x) ob.segValides_contour.push_back(Segment(it2->b, it->a));
+                        else ob.segValides_contour.push_back(Segment(it2->b, it->b));
+                    }
+                }
+                if(it->poid > it2->poid && !isIn(*it2, toDelete) && !isIn(*it, toDelete)){
+                    toDelete.push_back(*it);
+                    toDelete.push_back(*it2);
+                    if(it->a!=x){
+                        if(it2->a!=x) ob.segValides_contour.push_back(Segment(it->a, it2->a));
+                        else ob.segValides_contour.push_back(Segment(it->a, it2->b));
+                    } 
+                    else{
+                        if(it2->a!=x) ob.segValides_contour.push_back(Segment(it->b, it2->a));
+                        else ob.segValides_contour.push_back(Segment(it->b, it2->b));
+                    }
+                }
             }
         }
     }
